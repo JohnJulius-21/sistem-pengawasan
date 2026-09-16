@@ -386,7 +386,7 @@
 </div>
 
 <!-- Pindahkan pemanggil Chart.js ke bagian bawah body -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
 
 <script>
 // 1. Deklarasi variabel terlebih dahulu untuk mencegah error inisialisasi
@@ -395,12 +395,12 @@ let currentYear = "2025";
 let activePageType = null;
 let charts = {};
 
-// Cek apakah Chart.js berhasil dimuat sebelum mengatur defaultnya
+// Pengecekan Chart.js
 if (typeof Chart !== 'undefined') {
-  Chart.defaults.font.family = "Segoe UI, Arial, sans-serif";
-  Chart.defaults.color = "#5b6b85";
+    Chart.defaults.font.family = "Segoe UI, Arial, sans-serif";
+    Chart.defaults.color = "#5b6b85";
 } else {
-  console.warn("Chart.js gagal dimuat. Pastikan Anda terhubung ke internet.");
+    console.warn("Chart.js gagal dimuat. Pastikan Anda terhubung ke internet dan tidak ada ekstensi pemblokir iklan yang aktif.");
 }
 
 const colorMap = { Audit:"#2f6fed", Reviu:"#2fa86a", Evaluasi:"#f0862c", Pemantauan:"#7a5cd6", "Pengawasan Lainnya":"#22b3c2" };
