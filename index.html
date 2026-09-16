@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Sistem Informasi Pengawasan - Inspektorat Kota Ambon</title>
+<style>
+  :root{
+    --navy-900:#0f2149; --navy-800:#16305f; --navy-700:#1c3a73;
+    --blue-accent:#2f6fed; --green:#2fa86a; --orange:#f0862c;
+    --purple:#7a5cd6; --teal:#22b3c2; --bg:#eef1f6;
+    --card-bg:#ffffff; --text-dark:#122040; --text-mid:#5b6b85;
+    --text-light:#8b99b3; --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; font-family:"Segoe UI",Arial,sans-serif; background:var(--bg); color:var(--text-dark); }
+  .app{ display:grid; grid-template-columns:220px 1fr; grid-template-rows:auto 1fr; min-height:100vh; }
+  
+  /* HEADER */
+  /* HEADER (RAPIDAN) */
+.header {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, var(--navy-900), var(--navy-700));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 28px;
+  gap: 20px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.brand .logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+.brand .logo svg {
+  width: 28px;
+  height: 28px;
+}
+.brand-text .org {
+  font-weight: 700;
+  font-size: 14.5px;
+  line-height: 1.25;
+  letter-spacing: 0.4px;
+}
+.brand-text .tagline {
+  font-size: 10.5px;
+  color: #c7d3ea;
+  font-style: italic;
+  margin-top: 2px;
+}
+
+.divider {
+  width: 1px;
+  height: 38px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 0 16px;
+  flex-shrink: 0;
+}
+
+.title-block {
+  flex: 1;
+}
+.title-block .title {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  line-height: 1.2;
+}
+.title-block .subtitle {
+  font-size: 12px;
+  color: #c7d3ea;
+  margin-top: 3px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-shrink: 0;
+}
+.header-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12.5px;
+}
+.header-info .label {
+  color: #a9b9d8;
+  display: block;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+.header-info .value {
+  font-weight: 700;
+}
+.header-info svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+.year-select {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 12.5px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+}
+.year-select:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+.year-select option {
+  background: var(--navy-900);
+  color: #fff;
+}
+
+  /* SIDEBAR */
+  .sidebar{background:var(--navy-900);padding:18px 12px;}
+  .nav-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:8px;color:#b9c6e0;font-size:13.5px;font-weight:600;margin-bottom:4px;cursor:pointer;transition:background .15s ease;}
+  .nav-item svg{width:17px;height:17px;flex-shrink:0;}
+  .nav-item.active{background:var(--blue-accent);color:#fff;}
+  .nav-item:not(.active):hover{background:rgba(255,255,255,.06);color:#fff;}
+
+  /* MAIN & SPA PAGES */
+  .main{padding:22px 26px 40px;}
+  .page-content { display: none; animation: fadeIn 0.3s ease; }
+  .page-content.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* DASHBOARD COMPONENTS */
+  .kpi-row{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-bottom:20px;}
+  .kpi-card{border-radius:var(--radius);padding:18px 16px;color:#fff;display:flex;flex-direction:column;gap:14px;min-height:120px;box-shadow:0 4px 14px rgba(15,33,73,.12);}
+  .kpi-card .kpi-top{display:flex;align-items:center;gap:10px;}
+  .kpi-icon{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .kpi-icon svg{width:19px;height:19px;}
+  .kpi-label{font-size:13px;font-weight:700;line-height:1.2;}
+  .kpi-numbers .num{font-size:26px;font-weight:800;line-height:1;}
+  .kpi-growth{font-size:11.5px;display:flex;align-items:baseline;gap:5px;opacity:.95;}
+  
+  .bg-audit{background:linear-gradient(160deg,#2f6fed,#1c4fc2);}
+  .bg-reviu{background:linear-gradient(160deg,#34b876,#1f9a5f);}
+  .bg-evaluasi{background:linear-gradient(160deg,#f6963a,#e9781a);}
+  .bg-pemantauan{background:linear-gradient(160deg,#8a68e6,#6c48cf);}
+  .bg-pengawasan{background:linear-gradient(160deg,#22c2cf,#159aa7);}
+  .bg-ilhp{background:linear-gradient(160deg,#16305f,#0f2149);}
+
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px;}
+  .panel{background:var(--card-bg);border-radius:var(--radius);padding:18px 18px 14px;box-shadow:0 2px 10px rgba(15,33,73,.06);}
+  .panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;}
+  .panel h3{margin:0;font-size:14.5px;font-weight:800;color:var(--text-dark);}
+  .chart-wrap{position:relative;height:220px;}
+
+  /* TABLES & FORMS */
+  .apply-btn{ background:var(--blue-accent); color:#fff; border:none; padding:7px 16px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer; }
+  .apply-btn:hover{background:#1c4fc2;}
+  .reset-btn{ background:#fee; border:1px solid #fcc; color:#c0392b; padding:7px 14px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer; margin-left:8px; }
+  
+  table.data-table{width:100%;border-collapse:collapse;font-size:12.5px; margin-top: 10px;}
+  table.data-table thead tr{background:linear-gradient(135deg,var(--navy-900),var(--navy-700));color:#fff;}
+  table.data-table thead th{padding:9px 10px;text-align:left;font-weight:700;}
+  table.data-table tbody td{padding:10px;border-bottom:1px solid #eef1f6;color:var(--text-mid);}
+  
+  /* MODAL */
+  .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,33,73,0.6); z-index:1000; align-items:center; justify-content:center; }
+  .modal-overlay.active { display:flex; }
+  .modal-box { background:#fff; padding:24px; border-radius:12px; width:400px; box-shadow:0 10px 30px rgba(0,0,0,0.2); }
+  .modal-box h3 { margin-top:0; margin-bottom:16px; }
+  .form-group { margin-bottom:14px; }
+  .form-group label { display:block; font-size:11.5px; font-weight:700; margin-bottom:6px; color:var(--text-dark); }
+  .form-group input, .form-group select { width:100%; padding:8px 10px; border:1px solid #d7deeb; border-radius:6px; font-family:inherit; font-size:13px; }
+  .modal-actions { display:flex; justify-content:flex-end; gap:10px; margin-top:20px; }
+
+  /* UTILS */
+  .donut-flex{display:flex;align-items:center;gap:14px;}
+  .donut-canvas-box{position:relative;width:150px;height:150px;flex-shrink:0;}
+  .donut-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
+  .donut-center .big{font-size:20px;font-weight:800;color:var(--text-dark);}
+  .donut-center .small{font-size:10.5px;color:var(--text-mid);}
+  .legend{display:flex;flex-direction:column;gap:9px;font-size:12px;}
+  .legend-item{display:flex;align-items:center;gap:8px;}
+  .legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+
+  @media (max-width:1200px){ .kpi-row{grid-template-columns:repeat(3,1fr);} .grid-3{grid-template-columns:1fr;} }
+  @media (max-width:760px){
+    .app{grid-template-columns:1fr;}
+    .sidebar{display:flex;overflow-x:auto;gap:6px;padding:10px;}
+    .kpi-row{grid-template-columns:repeat(2,1fr);}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="brand">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L20 5V11C20 16 16.5 20 12 22C7.5 20 4 16 4 11V5L12 2Z" fill="#c0392b"/>
+          <path d="M12 4.3L18 6.6V11C18 15 15.2 18.2 12 19.9C8.8 18.2 6 15 6 11V6.6L12 4.3Z" fill="#0f2149"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <div class="org">INSPEKTORAT<br>KOTA AMBON</div>
+        <div class="tagline">Pengawasan untuk Pemerintahan yang Bersih</div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="title-block">
+      <div class="title">DASHBOARD SISTEM INFORMASI PENGAWASAN</div>
+      <div class="subtitle" id="headerSubtitle">Rekapitulasi Hasil Pengawasan</div>
+    </div>
+    <div class="header-right">
+       <div class="header-info">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
+        <rect x="3" y="4" width="18" height="18" rx="2"/>
+        <line x1="16" y1="2" x2="16" y2="6"/>
+        <line x1="8" y1="2" x2="8" y2="6"/>
+        <line x1="3" y1="10" x2="21" y2="10"/>
+      </svg>
+      <div>
+        <span class="label">Tanggal Update</span>
+        <span class="value" id="tglUpdate">-</span>
+      </div>
+    </div>
+      <div class="header-info">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <div>
+          <span class="label">Tahun Anggaran</span>
+          <select id="yearFilter" class="year-select" onchange="changeYear(this.value)">
+            <option value="2025">2025</option>
+            <option value="2024">2024</option>
+            <option value="2023">2023</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- SIDEBAR (Berfungsi sebagai Navigasi SPA) -->
+  <nav class="sidebar">
+    <div class="nav-item active" data-target="beranda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Beranda</div>
+    <div class="nav-item" data-target="crud" data-type="Audit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6l6 6v12H3V3h6z"/><path d="M9 3v6h6"/></svg>Audit</div>
+    <div class="nav-item" data-target="crud" data-type="Reviu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Reviu</div>
+    <div class="nav-item" data-target="crud" data-type="Evaluasi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="20" x2="4" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="20" y1="20" x2="20" y2="14"/></svg>Evaluasi</div>
+    <div class="nav-item" data-target="crud" data-type="Pemantauan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>Pemantauan</div>
+    <div class="nav-item" data-target="crud" data-type="Pengawasan Lainnya"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.9 2.9l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.6 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.9-2.9l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.6-1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.9-2.9l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.9 2.9l-.1.1a1.7 1.7 0 00-.3 1.9V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>Pengawasan Lainnya</div>
+    <div class="nav-item" data-target="ilhp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>ILHP</div>
+  </nav>
+
+  <main class="main">
+    
+    <!-- HALAMAN: BERANDA (DASHBOARD) -->
+    <div id="page-beranda" class="page-content active">
+      <div class="kpi-row" id="kpiRow"></div>
+
+      <div class="grid-3">
+        <div class="panel">
+          <div class="panel-head"><h3>Rekapitulasi (Berdasarkan Tahun)</h3></div>
+          <div class="chart-wrap"><canvas id="barRekap"></canvas></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h3>Persentase Pengawasan</h3></div>
+          <div class="donut-flex">
+            <div class="donut-canvas-box">
+              <canvas id="donutPersen"></canvas>
+              <div class="donut-center"><div class="big" id="totalPersen">0</div><div class="small">Total</div></div>
+            </div>
+            <div class="legend" id="legendPersen"></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h3>Tren Kegiatan (2023-2025)</h3></div>
+          <div class="chart-wrap"><canvas id="trenChart"></canvas></div>
+        </div>
+      </div>
+      
+      <div class="grid-3">
+        <div class="panel">
+          <div class="panel-head"><h3>Status Tindak Lanjut</h3></div>
+          <div class="donut-flex">
+            <div class="donut-canvas-box">
+              <canvas id="donutTindak"></canvas>
+              <div class="donut-center"><div class="big" id="pctSelesai">0%</div><div class="small">Selesai</div></div>
+            </div>
+            <div class="legend" id="legendTindak"></div>
+          </div>
+        </div>
+        <div class="panel" style="grid-column: span 2;">
+          <div class="panel-head"><h3>Sebaran Objek Pengawasan</h3></div>
+          <div class="chart-wrap"><canvas id="sebaranChart"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HALAMAN: CRUD DINAMIS (Audit, Reviu, dll) -->
+    <div id="page-crud" class="page-content">
+      <div class="panel">
+        <div class="panel-head">
+          <h3 id="crudTitle">Data Pengawasan</h3>
+          <button class="apply-btn" onclick="openModal()">+ Tambah Data</button>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width:50px">No</th>
+              <th>Nama Kegiatan</th>
+              <th>Objek (OPD/Desa)</th>
+              <th>Status</th>
+              <th style="width:150px">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="crudTableBody">
+            <!-- Data injected via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- HALAMAN: ILHP -->
+    <div id="page-ilhp" class="page-content">
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Rekapitulasi Dokumen ILHP</h3>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>Tahun</th><th>Jumlah Dokumen</th><th>Status Penyusunan</th></tr></thead>
+          <tbody id="ilhpTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL FORM CRUD -->
+<div class="modal-overlay" id="crudModal">
+  <div class="modal-box">
+    <h3 id="modalTitle">Tambah Data</h3>
+    <input type="hidden" id="formId">
+    
+    <div class="form-group">
+      <label>Nama Kegiatan</label>
+      <input type="text" id="formNama" placeholder="Contoh: Audit Dana Desa...">
+    </div>
+    <div class="form-group">
+      <label>Objek (OPD / Desa)</label>
+      <input type="text" id="formObjek" placeholder="Contoh: Dinas Pendidikan">
+    </div>
+    <div class="form-group">
+      <label>Status</label>
+      <select id="formStatus">
+        <option value="Selesai">Selesai</option>
+        <option value="Dalam Proses">Dalam Proses</option>
+        <option value="Belum Mulai">Belum Mulai</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="reset-btn" onclick="closeModal()">Batal</button>
+      <button class="apply-btn" onclick="saveCrudData()">Simpan Data</button>
+    </div>
+  </div>
+</div>
+
+<!-- Pindahkan pemanggil Chart.js ke bagian bawah body -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+
+<script>
+// 1. Deklarasi variabel terlebih dahulu untuk mencegah error inisialisasi
+const STORAGE_KEY = "ambon_multiyear_db_v1";
+let currentYear = "2025";
+let activePageType = null;
+let charts = {};
+
+// Cek apakah Chart.js berhasil dimuat sebelum mengatur defaultnya
+if (typeof Chart !== 'undefined') {
+  Chart.defaults.font.family = "Segoe UI, Arial, sans-serif";
+  Chart.defaults.color = "#5b6b85";
+} else {
+  console.warn("Chart.js gagal dimuat. Pastikan Anda terhubung ke internet.");
+}
+
+const colorMap = { Audit:"#2f6fed", Reviu:"#2fa86a", Evaluasi:"#f0862c", Pemantauan:"#7a5cd6", "Pengawasan Lainnya":"#22b3c2" };
+const kpiBg = { Audit:"bg-audit", Reviu:"bg-reviu", Evaluasi:"bg-evaluasi", Pemantauan:"bg-pemantauan", "Pengawasan Lainnya":"bg-pengawasan", 
+  ILHP:"bg-ilhp" };
+const kpiIcon = {
+  Audit:'<path d="M9 3h6l6 6v12H3V3h6z"/><path d="M9 3v6h6"/>',
+  Reviu:'<circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+  Evaluasi:'<line x1="4" y1="20" x2="4" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="20" y1="20" x2="20" y2="14"/>',
+  Pemantauan:'<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/>',
+  "Pengawasan Lainnya":'<circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/>',
+  ILHP:'<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/>'
+};
+
+// Data Default Terstruktur per Tahun Anggaran
+const DEFAULT_DATA = {
+  tren: {
+    years: ["2023", "2024", "2025"],
+    series: [
+      {label:"Audit", data:[9, 10, 15]},
+      {label:"Reviu", data:[5, 7, 10]},
+      {label:"Evaluasi", data:[6, 11, 8]},
+      {label:"Pemantauan", data:[8, 13, 14]},
+      {label:"Pengawasan Lainnya", data:[4, 5, 8]}
+    ]
+  },
+  ilhp: [
+    {tahun:2023, jumlah:6, status:"Tersusun"},
+    {tahun:2024, jumlah:5, status:"Tersusun"},
+    {tahun:2025, jumlah:5, status:"Dalam Proses"}
+  ],
+  years: {
+    "2025": {
+      kegiatan: [ {label:"Audit", value:15}, {label:"Reviu", value:10}, {label:"Evaluasi", value:8}, {label:"Pemantauan", value:14}, {label:"Pengawasan Lainnya", value:8} ],
+      tindak: [ {label:"Selesai", value:55, color:"#2fa86a"}, {label:"Dalam Proses", value:12, color:"#f2b23a"}, {label:"Belum", value:5, color:"#e5493f"} ],
+      sebaran: [ {label:"OPD", value:40}, {label:"Desa", value:18}, {label:"UPT", value:6}, {label:"Lainnya", value:3} ]
+    },
+    "2024": {
+      kegiatan: [ {label:"Audit", value:10}, {label:"Reviu", value:7}, {label:"Evaluasi", value:11}, {label:"Pemantauan", value:13}, {label:"Pengawasan Lainnya", value:5} ],
+      tindak: [ {label:"Selesai", value:42, color:"#2fa86a"}, {label:"Dalam Proses", value:8, color:"#f2b23a"}, {label:"Belum", value:2, color:"#e5493f"} ],
+      sebaran: [ {label:"OPD", value:35}, {label:"Desa", value:12}, {label:"UPT", value:4}, {label:"Lainnya", value:2} ]
+    },
+    "2023": {
+      kegiatan: [ {label:"Audit", value:9}, {label:"Reviu", value:5}, {label:"Evaluasi", value:6}, {label:"Pemantauan", value:8}, {label:"Pengawasan Lainnya", value:4} ],
+      tindak: [ {label:"Selesai", value:30, color:"#2fa86a"}, {label:"Dalam Proses", value:4, color:"#f2b23a"}, {label:"Belum", value:1, color:"#e5493f"} ],
+      sebaran: [ {label:"OPD", value:28}, {label:"Desa", value:10}, {label:"UPT", value:3}, {label:"Lainnya", value:1} ]
+    }
+  },
+  crudData: {
+    "2025": {
+      "Audit": [ {id:1, nama:"Audit Reguler Dinas Pendidikan", objek:"Dinas Pendidikan", status:"Dalam Proses"} ],
+      "Reviu": [ {id:2, nama:"Reviu RKA Bappeda", objek:"Bappeda", status:"Selesai"} ],
+      "Evaluasi": [], "Pemantauan": [], "Pengawasan Lainnya": []
+    },
+    "2024": { "Audit": [], "Reviu": [], "Evaluasi": [], "Pemantauan": [], "Pengawasan Lainnya": [] },
+    "2023": { "Audit": [], "Reviu": [], "Evaluasi": [], "Pemantauan": [], "Pengawasan Lainnya": [] }
+  }
+};
+
+let state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || JSON.parse(JSON.stringify(DEFAULT_DATA));
+
+// ==========================================
+// MENDENGARKAN EVENT (Mengganti inline HTML)
+// ==========================================
+document.getElementById('yearFilter').addEventListener('change', function(e) {
+  changeYear(e.target.value);
+});
+
+// === SISTEM NAVIGASI (SPA) ===
+document.querySelectorAll('.sidebar .nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.sidebar .nav-item').forEach(n => n.classList.remove('active'));
+    item.classList.add('active');
+    
+    const target = item.dataset.target;
+    document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + target).classList.add('active');
+    
+    if(target === 'beranda') {
+      document.getElementById('headerSubtitle').innerText = "Dashboard Rekapitulasi";
+      renderDashboard();
+    } else if (target === 'crud') {
+      activePageType = item.dataset.type;
+      document.getElementById('headerSubtitle').innerText = "Manajemen Data - " + activePageType;
+      renderCrudPage();
+    } else if (target === 'ilhp') {
+      document.getElementById('headerSubtitle').innerText = "Data ILHP";
+      renderIlhpPage();
+    }
+  });
+});
+
+// === LOGIC TAHUN ANGGARAN ===
+function changeYear(year) {
+  currentYear = year;
+  if (document.getElementById('page-beranda').classList.contains('active')) {
+    renderDashboard();
+  } else if (document.getElementById('page-crud').classList.contains('active')) {
+    renderCrudPage();
+  }
+}
+
+// === RENDER DASHBOARD ===
+function renderDashboard() {
+  const yData = state.years[currentYear];
+
+  const currentIlhp = state.ilhp.find(i => i.tahun == currentYear);
+  const jumlahIlhp = currentIlhp ? currentIlhp.jumlah : 0;
+  
+  // 1. Render KPI (Kegiatan + ILHP)
+  let kpiHtml = yData.kegiatan.map(k => `
+    <div class="kpi-card ${kpiBg[k.label]}">
+      <div class="kpi-top">
+        <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">${kpiIcon[k.label]}</svg></div>
+        <div class="kpi-label">${k.label}</div>
+      </div>
+      <div class="kpi-numbers"><div class="num">${k.value}</div><div style="font-size:11px;opacity:0.9">Kegiatan</div></div>
+    </div>
+  `).join("");
+
+  // Tambahkan Kartu KPI Khusus ILHP di akhir grid
+  kpiHtml += `
+    <div class="kpi-card ${kpiBg['ILHP']}">
+      <div class="kpi-top">
+        <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">${kpiIcon['ILHP']}</svg></div>
+        <div class="kpi-label">ILHP</div>
+      </div>
+      <div class="kpi-numbers"><div class="num">${jumlahIlhp}</div><div style="font-size:11px;opacity:0.9">Dokumen</div></div>
+    </div>
+  `;
+
+  document.getElementById("kpiRow").innerHTML = kpiHtml;
+
+  // Cegah render chart jika Chart.js gagal diload karena tidak ada internet
+  if (typeof Chart === 'undefined') return;
+
+  // 2. Bar Chart
+  const barCtx = document.getElementById("barRekap");
+  if(charts.bar){ 
+    charts.bar.data.datasets[0].data = yData.kegiatan.map(k=>k.value); charts.bar.update(); 
+  } else {
+    charts.bar = new Chart(barCtx, {
+      type:'bar',
+      data:{ labels:yData.kegiatan.map(k=>k.label), datasets:[{ data:yData.kegiatan.map(k=>k.value), backgroundColor:Object.values(colorMap), borderRadius:4 }] },
+      options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false} }, scales:{ x:{grid:{display:false}} } }
+    });
+  }
+
+  // 3. Donut Persentase
+  const totalKeg = yData.kegiatan.reduce((s,k)=>s+Number(k.value),0);
+  document.getElementById("totalPersen").innerText = totalKeg;
+  if(charts.donutPersen){
+    charts.donutPersen.data.datasets[0].data = yData.kegiatan.map(k=>k.value); charts.donutPersen.update();
+  } else {
+    charts.donutPersen = new Chart(document.getElementById("donutPersen"), {
+      type:'doughnut',
+      data:{ labels:yData.kegiatan.map(k=>k.label), datasets:[{ data:yData.kegiatan.map(k=>k.value), backgroundColor:Object.values(colorMap), borderWidth:2 }] },
+      options:{ responsive:true, maintainAspectRatio:false, cutout:'65%', plugins:{ legend:{display:false} } }
+    });
+  }
+  document.getElementById("legendPersen").innerHTML = yData.kegiatan.map((k,i)=>`
+    <div class="legend-item"><span class="legend-dot" style="background:${Object.values(colorMap)[i]}"></span>
+    <span style="flex:1;color:var(--text-mid)">${k.label}</span><strong>${k.value}</strong></div>
+  `).join("");
+
+  // 4. Tren Chart (Lintas Tahun)
+  if(!charts.tren) {
+    const t = state.tren;
+    const datasets = t.series.map((s,i)=>({ type:'bar', label:s.label, data:s.data, backgroundColor:Object.values(colorMap)[i] }));
+    charts.tren = new Chart(document.getElementById("trenChart"), {
+      data:{ labels:t.years, datasets },
+      options:{ responsive:true, maintainAspectRatio:false, scales:{ x:{grid:{display:false}} } }
+    });
+  }
+
+  // 5. Donut Tindak Lanjut
+  const totalTindak = yData.tindak.reduce((s,t)=>s+t.value,0);
+  const pct = totalTindak > 0 ? Math.round((yData.tindak[0].value/totalTindak)*100) : 0;
+  document.getElementById("pctSelesai").innerText = pct + "%";
+  if(charts.donutTindak){
+    charts.donutTindak.data.datasets[0].data = yData.tindak.map(t=>t.value); charts.donutTindak.update();
+  } else {
+    charts.donutTindak = new Chart(document.getElementById("donutTindak"), {
+      type:'doughnut',
+      data:{ labels:yData.tindak.map(t=>t.label), datasets:[{ data:yData.tindak.map(t=>t.value), backgroundColor:yData.tindak.map(t=>t.color) }] },
+      options:{ responsive:true, maintainAspectRatio:false, cutout:'65%', plugins:{ legend:{display:false} } }
+    });
+  }
+  document.getElementById("legendTindak").innerHTML = yData.tindak.map(t=>`
+    <div class="legend-item"><span class="legend-dot" style="background:${t.color}"></span>
+    <span style="flex:1;color:var(--text-mid)">${t.label}</span><strong>${t.value}</strong></div>
+  `).join("");
+
+  // 6. Bar Sebaran
+  if(charts.sebaran){
+    charts.sebaran.data.datasets[0].data = yData.sebaran.map(s=>s.value); charts.sebaran.update();
+  } else {
+    charts.sebaran = new Chart(document.getElementById("sebaranChart"), {
+      type:'bar',
+      data:{ labels:yData.sebaran.map(s=>s.label), datasets:[{ data:yData.sebaran.map(s=>s.value), backgroundColor:Object.values(colorMap), borderRadius:4 }] },
+      options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false} } }
+    });
+  }
+}
+
+// === SISTEM CRUD ===
+function renderCrudPage() {
+  document.getElementById("crudTitle").innerText = `Daftar Kegiatan ${activePageType} - Tahun ${currentYear}`;
+  const dataList = state.crudData[currentYear][activePageType] || [];
+  
+  const tbody = document.getElementById("crudTableBody");
+  if(dataList.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:20px;">Belum ada data ${activePageType} untuk tahun ${currentYear}.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = dataList.map((item, index) => `
+    <tr>
+      <td>${index + 1}</td>
+      <td style="font-weight:600;color:var(--text-dark)">${item.nama}</td>
+      <td>${item.objek}</td>
+      <td><span style="padding:4px 10px;border-radius:12px;font-size:11px;font-weight:700;
+          background:${item.status==='Selesai'?'#d5f2e2':(item.status==='Dalam Proses'?'#fdecc4':'#fcdbdb')};
+          color:${item.status==='Selesai'?'#1f8a52':(item.status==='Dalam Proses'?'#b0791a':'#c0392b')}">${item.status}</span></td>
+      <td>
+        <button onclick="editCrudData(${item.id})" class="apply-btn" style="padding:5px 10px;font-size:11px;">Edit</button>
+        <button onclick="deleteCrudData(${item.id})" class="reset-btn" style="padding:5px 10px;font-size:11px;margin-left:4px;">Hapus</button>
+      </td>
+    </tr>
+  `).join("");
+}
+
+function openModal() {
+  document.getElementById("formId").value = "";
+  document.getElementById("formNama").value = "";
+  document.getElementById("formObjek").value = "";
+  document.getElementById("formStatus").value = "Dalam Proses";
+  document.getElementById("modalTitle").innerText = `Tambah ${activePageType} (${currentYear})`;
+  document.getElementById("crudModal").classList.add("active");
+}
+
+function closeModal() { document.getElementById("crudModal").classList.remove("active"); }
+
+function saveCrudData() {
+  const id = document.getElementById("formId").value;
+  const nama = document.getElementById("formNama").value;
+  const objek = document.getElementById("formObjek").value;
+  const status = document.getElementById("formStatus").value;
+
+  if(!nama || !objek) return alert("Nama kegiatan dan Objek harus diisi!");
+
+  let dataList = state.crudData[currentYear][activePageType];
+  
+  if(id) {
+    const idx = dataList.findIndex(d => d.id == id);
+    if(idx > -1) { dataList[idx] = { id:Number(id), nama, objek, status }; }
+  } else {
+    const newId = new Date().getTime();
+    dataList.push({ id:newId, nama, objek, status });
+  }
+
+  const kpiIdx = state.years[currentYear].kegiatan.findIndex(k => k.label === activePageType);
+  if(kpiIdx > -1) { state.years[currentYear].kegiatan[kpiIdx].value = dataList.length; }
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  closeModal();
+  renderCrudPage();
+}
+
+function editCrudData(id) {
+  const item = state.crudData[currentYear][activePageType].find(d => d.id == id);
+  if(!item) return;
+  document.getElementById("formId").value = item.id;
+  document.getElementById("formNama").value = item.nama;
+  document.getElementById("formObjek").value = item.objek;
+  document.getElementById("formStatus").value = item.status;
+  document.getElementById("modalTitle").innerText = `Edit ${activePageType} (${currentYear})`;
+  document.getElementById("crudModal").classList.add("active");
+}
+
+function deleteCrudData(id) {
+  if(!confirm("Yakin ingin menghapus data ini?")) return;
+  let dataList = state.crudData[currentYear][activePageType];
+  state.crudData[currentYear][activePageType] = dataList.filter(d => d.id != id);
+  
+  const kpiIdx = state.years[currentYear].kegiatan.findIndex(k => k.label === activePageType);
+  if(kpiIdx > -1) { state.years[currentYear].kegiatan[kpiIdx].value = state.crudData[currentYear][activePageType].length; }
+  
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  renderCrudPage();
+}
+
+function renderIlhpPage() {
+  document.getElementById("ilhpTableBody").innerHTML = state.ilhp.map(item => `
+    <tr>
+      <td style="font-weight:700;color:var(--text-dark)">Tahun ${item.tahun}</td>
+      <td>${item.jumlah} Dokumen Laporan</td>
+      <td><span style="padding:4px 10px;border-radius:12px;font-size:11px;font-weight:700;
+          background:${item.status==='Tersusun'?'#d5f2e2':'#fdecc4'};
+          color:${item.status==='Tersusun'?'#1f8a52':'#b0791a'}">${item.status}</span></td>
+    </tr>
+  `).join("");
+}
+
+// Fungsi untuk menampilkan tanggal hari ini (Format Bahasa Indonesia)
+function setTanggalHariIni() {
+  const hariIni = new Date();
+  const opsi = { day: 'numeric', month: 'long', year: 'numeric' };
+  const tanggalFormatted = hariIni.toLocaleDateString('id-ID', opsi);
+
+  const elTgl = document.getElementById('tglUpdate');
+  if (elTgl) {
+    elTgl.innerText = tanggalFormatted;
+  }
+}
+
+// Panggil fungsi tanggal bersamaan saat inisialisasi awal
+setTanggalHariIni();
+renderDashboard();
+</script>
+</body>
+</html>
