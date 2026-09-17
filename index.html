@@ -1,517 +1,1228 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard Sistem Informasi Pengawasan - Inspektorat Kota Ambon</title>
-<style>
-  :root{
-    --navy-900:#0f2149; --navy-800:#16305f; --navy-700:#1c3a73;
-    --blue-accent:#2f6fed; --green:#2fa86a; --orange:#f0862c;
-    --purple:#7a5cd6; --teal:#22b3c2; --bg:#eef1f6;
-    --card-bg:#ffffff; --text-dark:#122040; --text-mid:#5b6b85;
-    --text-light:#8b99b3; --radius:10px;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Sistem Informasi Pengawasan - Inspektorat Kota Ambon</title>
+  <style>
+    :root {
+      --navy-900: #0f2149;
+      --navy-800: #16305f;
+      --navy-700: #1c3a73;
+      --blue-accent: #2f6fed;
+      --green: #2fa86a;
+      --orange: #f0862c;
+      --purple: #7a5cd6;
+      --teal: #22b3c2;
+      --bg: #eef1f6;
+      --card-bg: #ffffff;
+      --text-dark: #122040;
+      --text-mid: #5b6b85;
+      --text-light: #8b99b3;
+      --radius: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text-dark);
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      grid-template-rows: auto 1fr;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    /* HEADER (RAPIDAN) */
+    .header {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, var(--navy-900), var(--navy-700));
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 28px;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .brand .logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .brand .logo svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .brand-text .org {
+      font-weight: 700;
+      font-size: 14.5px;
+      line-height: 1.25;
+      letter-spacing: 0.4px;
+    }
+
+    .brand-text .tagline {
+      font-size: 10.5px;
+      color: #c7d3ea;
+      font-style: italic;
+      margin-top: 2px;
+    }
+
+    .divider {
+      width: 1px;
+      height: 38px;
+      background: rgba(255, 255, 255, 0.2);
+      margin: 0 16px;
+      flex-shrink: 0;
+    }
+
+    .title-block {
+      flex: 1;
+    }
+
+    .title-block .title {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      line-height: 1.2;
+    }
+
+    .title-block .subtitle {
+      font-size: 12px;
+      color: #c7d3ea;
+      margin-top: 3px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-shrink: 0;
+    }
+
+    .header-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12.5px;
+    }
+
+    .header-info .label {
+      color: #a9b9d8;
+      display: block;
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+
+    .header-info .value {
+      font-weight: 700;
+    }
+
+    .header-info svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      opacity: 0.85;
+    }
+
+    .year-select {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 12.5px;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .year-select:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .year-select option {
+      background: var(--navy-900);
+      color: #fff;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      background: var(--navy-900);
+      padding: 18px 12px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      border-radius: 8px;
+      color: #b9c6e0;
+      font-size: 13.5px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      cursor: pointer;
+      transition: background .15s ease;
+    }
+
+    .nav-item svg {
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
+    }
+
+    .nav-item.active {
+      background: var(--blue-accent);
+      color: #fff;
+    }
+
+    .nav-item:not(.active):hover {
+      background: rgba(255, 255, 255, .06);
+      color: #fff;
+    }
+
+    /* MAIN & SPA PAGES */
+    .main {
+      padding: 22px 26px 40px;
+    }
+
+    .page-content {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .page-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* DASHBOARD COMPONENTS */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .kpi-card {
+      border-radius: var(--radius);
+      padding: 18px 16px;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-height: 120px;
+      box-shadow: 0 4px 14px rgba(15, 33, 73, .12);
+    }
+
+    .kpi-card .kpi-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .kpi-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .kpi-icon svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    .kpi-label {
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .kpi-numbers .num {
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .kpi-growth {
+      font-size: 11.5px;
+      display: flex;
+      align-items: baseline;
+      gap: 5px;
+      opacity: .95;
+    }
+
+    .bg-audit {
+      background: linear-gradient(160deg, #2f6fed, #1c4fc2);
+    }
+
+    .bg-reviu {
+      background: linear-gradient(160deg, #34b876, #1f9a5f);
+    }
+
+    .bg-evaluasi {
+      background: linear-gradient(160deg, #f6963a, #e9781a);
+    }
+
+    .bg-pemantauan {
+      background: linear-gradient(160deg, #8a68e6, #6c48cf);
+    }
+
+    .bg-pengawasan {
+      background: linear-gradient(160deg, #22c2cf, #159aa7);
+    }
+
+    .bg-ilhp {
+      background: linear-gradient(160deg, #16305f, #0f2149);
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .panel {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 18px 18px 14px;
+      box-shadow: 0 2px 10px rgba(15, 33, 73, .06);
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .panel h3 {
+      margin: 0;
+      font-size: 14.5px;
+      font-weight: 800;
+      color: var(--text-dark);
+    }
+
+    .chart-wrap {
+      position: relative;
+      height: 220px;
+    }
+
+    /* STYLE UNTUK TOMBOL IKON AKSI */
+  .action-group { display: flex; gap: 6px; justify-content: center; }
+  .icon-btn { 
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 6px; border: none; cursor: pointer;
+    transition: all 0.2s ease; background: transparent;
   }
-  *{box-sizing:border-box;}
-  body{ margin:0; font-family:"Segoe UI",Arial,sans-serif; background:var(--bg); color:var(--text-dark); }
-  .app{ display:grid; grid-template-columns:220px 1fr; grid-template-rows:auto 1fr; min-height:100vh; }
+  .icon-btn svg { width: 14px; height: 14px; }
   
-  /* HEADER */
-  /* HEADER (RAPIDAN) */
-.header {
-  grid-column: 1 / -1;
-  background: linear-gradient(135deg, var(--navy-900), var(--navy-700));
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 28px;
-  gap: 20px;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
-}
-.brand .logo {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-}
-.brand .logo svg {
-  width: 28px;
-  height: 28px;
-}
-.brand-text .org {
-  font-weight: 700;
-  font-size: 14.5px;
-  line-height: 1.25;
-  letter-spacing: 0.4px;
-}
-.brand-text .tagline {
-  font-size: 10.5px;
-  color: #c7d3ea;
-  font-style: italic;
-  margin-top: 2px;
-}
-
-.divider {
-  width: 1px;
-  height: 38px;
-  background: rgba(255, 255, 255, 0.2);
-  margin: 0 16px;
-  flex-shrink: 0;
-}
-
-.title-block {
-  flex: 1;
-}
-.title-block .title {
-  font-size: 18px;
-  font-weight: 800;
-  letter-spacing: 0.4px;
-  line-height: 1.2;
-}
-.title-block .subtitle {
-  font-size: 12px;
-  color: #c7d3ea;
-  margin-top: 3px;
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  flex-shrink: 0;
-}
-.header-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 12.5px;
-}
-.header-info .label {
-  color: #a9b9d8;
-  display: block;
-  font-size: 10.5px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 2px;
-}
-.header-info .value {
-  font-weight: 700;
-}
-.header-info svg {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-  opacity: 0.85;
-}
-
-.year-select {
-  background: rgba(255, 255, 255, 0.12);
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  padding: 5px 10px;
-  border-radius: 6px;
-  font-weight: 700;
-  font-size: 12.5px;
-  cursor: pointer;
-  outline: none;
-  transition: all 0.2s ease;
-}
-.year-select:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.4);
-}
-.year-select option {
-  background: var(--navy-900);
-  color: #fff;
-}
-
-  /* SIDEBAR */
-  .sidebar{background:var(--navy-900);padding:18px 12px;}
-  .nav-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:8px;color:#b9c6e0;font-size:13.5px;font-weight:600;margin-bottom:4px;cursor:pointer;transition:background .15s ease;}
-  .nav-item svg{width:17px;height:17px;flex-shrink:0;}
-  .nav-item.active{background:var(--blue-accent);color:#fff;}
-  .nav-item:not(.active):hover{background:rgba(255,255,255,.06);color:#fff;}
-
-  /* MAIN & SPA PAGES */
-  .main{padding:22px 26px 40px;}
-  .page-content { display: none; animation: fadeIn 0.3s ease; }
-  .page-content.active { display: block; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-  /* DASHBOARD COMPONENTS */
-  .kpi-row{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-bottom:20px;}
-  .kpi-card{border-radius:var(--radius);padding:18px 16px;color:#fff;display:flex;flex-direction:column;gap:14px;min-height:120px;box-shadow:0 4px 14px rgba(15,33,73,.12);}
-  .kpi-card .kpi-top{display:flex;align-items:center;gap:10px;}
-  .kpi-icon{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-  .kpi-icon svg{width:19px;height:19px;}
-  .kpi-label{font-size:13px;font-weight:700;line-height:1.2;}
-  .kpi-numbers .num{font-size:26px;font-weight:800;line-height:1;}
-  .kpi-growth{font-size:11.5px;display:flex;align-items:baseline;gap:5px;opacity:.95;}
+  .btn-view { color: var(--blue-accent); background: rgba(47, 111, 237, 0.1); }
+  .btn-view:hover { background: var(--blue-accent); color: #fff; }
   
-  .bg-audit{background:linear-gradient(160deg,#2f6fed,#1c4fc2);}
-  .bg-reviu{background:linear-gradient(160deg,#34b876,#1f9a5f);}
-  .bg-evaluasi{background:linear-gradient(160deg,#f6963a,#e9781a);}
-  .bg-pemantauan{background:linear-gradient(160deg,#8a68e6,#6c48cf);}
-  .bg-pengawasan{background:linear-gradient(160deg,#22c2cf,#159aa7);}
-  .bg-ilhp{background:linear-gradient(160deg,#16305f,#0f2149);}
-
-  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px;}
-  .panel{background:var(--card-bg);border-radius:var(--radius);padding:18px 18px 14px;box-shadow:0 2px 10px rgba(15,33,73,.06);}
-  .panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;}
-  .panel h3{margin:0;font-size:14.5px;font-weight:800;color:var(--text-dark);}
-  .chart-wrap{position:relative;height:220px;}
-
-  /* TABLES & FORMS */
-  .apply-btn{ background:var(--blue-accent); color:#fff; border:none; padding:7px 16px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer; }
-  .apply-btn:hover{background:#1c4fc2;}
-  .reset-btn{ background:#fee; border:1px solid #fcc; color:#c0392b; padding:7px 14px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer; margin-left:8px; }
+  .btn-edit { color: var(--orange); background: rgba(240, 134, 44, 0.1); }
+  .btn-edit:hover { background: var(--orange); color: #fff; }
   
-  table.data-table{width:100%;border-collapse:collapse;font-size:12.5px; margin-top: 10px;}
-  table.data-table thead tr{background:linear-gradient(135deg,var(--navy-900),var(--navy-700));color:#fff;}
-  table.data-table thead th{padding:9px 10px;text-align:left;font-weight:700;}
-  table.data-table tbody td{padding:10px;border-bottom:1px solid #eef1f6;color:var(--text-mid);}
-  
-  /* MODAL */
-  .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,33,73,0.6); z-index:1000; align-items:center; justify-content:center; }
-  .modal-overlay.active { display:flex; }
-  .modal-box { background:#fff; padding:24px; border-radius:12px; width:400px; box-shadow:0 10px 30px rgba(0,0,0,0.2); }
-  .modal-box h3 { margin-top:0; margin-bottom:16px; }
-  .form-group { margin-bottom:14px; }
-  .form-group label { display:block; font-size:11.5px; font-weight:700; margin-bottom:6px; color:var(--text-dark); }
-  .form-group input, .form-group select { width:100%; padding:8px 10px; border:1px solid #d7deeb; border-radius:6px; font-family:inherit; font-size:13px; }
-  .modal-actions { display:flex; justify-content:flex-end; gap:10px; margin-top:20px; }
+  .btn-delete { color: #e5493f; background: rgba(229, 73, 63, 0.1); }
+  .btn-delete:hover { background: #e5493f; color: #fff; }
 
-  /* UTILS */
-  .donut-flex{display:flex;align-items:center;gap:14px;}
-  .donut-canvas-box{position:relative;width:150px;height:150px;flex-shrink:0;}
-  .donut-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
-  .donut-center .big{font-size:20px;font-weight:800;color:var(--text-dark);}
-  .donut-center .small{font-size:10.5px;color:var(--text-mid);}
-  .legend{display:flex;flex-direction:column;gap:9px;font-size:12px;}
-  .legend-item{display:flex;align-items:center;gap:8px;}
-  .legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+    /* TABLES & FORMS */
+    .apply-btn {
+      background: var(--blue-accent);
+      color: #fff;
+      border: none;
+      padding: 7px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
 
-  @media (max-width:1200px){ .kpi-row{grid-template-columns:repeat(3,1fr);} .grid-3{grid-template-columns:1fr;} }
-  @media (max-width:760px){
-    .app{grid-template-columns:1fr;}
-    .sidebar{display:flex;overflow-x:auto;gap:6px;padding:10px;}
-    .kpi-row{grid-template-columns:repeat(2,1fr);}
-  }
-</style>
+    .apply-btn:hover {
+      background: #1c4fc2;
+    }
+
+    .reset-btn {
+      background: #fee;
+      border: 1px solid #fcc;
+      color: #c0392b;
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-left: 8px;
+    }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+      margin-top: 10px;
+    }
+
+    table.data-table thead tr {
+      background: linear-gradient(135deg, var(--navy-900), var(--navy-700));
+      color: #fff;
+    }
+
+    table.data-table thead th {
+      padding: 9px 10px;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    table.data-table tbody td {
+      padding: 10px;
+      border-bottom: 1px solid #eef1f6;
+      color: var(--text-mid);
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 33, 73, 0.6);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-box {
+      background: #fff;
+      padding: 24px;
+      border-radius: 12px;
+      width: 400px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-box h3 {
+      margin-top: 0;
+      margin-bottom: 16px;
+    }
+
+    .grid-form.cols-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      margin-bottom: 4px;
+      font-weight: 200;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #d7deeb;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 13px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    /* UTILS */
+    .donut-flex {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .donut-canvas-box {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      flex-shrink: 0;
+    }
+
+    .donut-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .donut-center .big {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-dark);
+    }
+
+    .donut-center .small {
+      font-size: 10.5px;
+      color: var(--text-mid);
+    }
+
+    .legend {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      font-size: 12px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .legend-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    @media (max-width:1200px) {
+      .kpi-row {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width:760px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: flex;
+        overflow-x: auto;
+        gap: 6px;
+        padding: 10px;
+      }
+
+      .kpi-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
 </head>
+
 <body>
-<div class="app">
+  <div class="app">
 
-  <!-- HEADER -->
-  <header class="header">
-    <div class="brand">
-      <div class="logo">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2L20 5V11C20 16 16.5 20 12 22C7.5 20 4 16 4 11V5L12 2Z" fill="#c0392b"/>
-          <path d="M12 4.3L18 6.6V11C18 15 15.2 18.2 12 19.9C8.8 18.2 6 15 6 11V6.6L12 4.3Z" fill="#0f2149"/>
-        </svg>
-      </div>
-      <div class="brand-text">
-        <div class="org">INSPEKTORAT<br>KOTA AMBON</div>
-        <div class="tagline">Pengawasan untuk Pemerintahan yang Bersih</div>
-      </div>
-    </div>
-    <div class="divider"></div>
-    <div class="title-block">
-      <div class="title">DASHBOARD SISTEM INFORMASI PENGAWASAN</div>
-      <div class="subtitle" id="headerSubtitle">Rekapitulasi Hasil Pengawasan</div>
-    </div>
-    <div class="header-right">
-       <div class="header-info">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
-        <rect x="3" y="4" width="18" height="18" rx="2"/>
-        <line x1="16" y1="2" x2="16" y2="6"/>
-        <line x1="8" y1="2" x2="8" y2="6"/>
-        <line x1="3" y1="10" x2="21" y2="10"/>
-      </svg>
-      <div>
-        <span class="label">Tanggal Update</span>
-        <span class="value" id="tglUpdate">-</span>
-      </div>
-    </div>
-      <div class="header-info">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        <div>
-          <span class="label">Tahun Anggaran</span>
-          <select id="yearFilter" class="year-select" onchange="changeYear(this.value)">
-            <option value="2025">2025</option>
-            <option value="2024">2024</option>
-            <option value="2023">2023</option>
-          </select>
+    <!-- HEADER -->
+    <header class="header">
+      <div class="brand">
+        <div class="logo">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L20 5V11C20 16 16.5 20 12 22C7.5 20 4 16 4 11V5L12 2Z" fill="#c0392b" />
+            <path d="M12 4.3L18 6.6V11C18 15 15.2 18.2 12 19.9C8.8 18.2 6 15 6 11V6.6L12 4.3Z" fill="#0f2149" />
+          </svg>
+        </div>
+        <div class="brand-text">
+          <div class="org">INSPEKTORAT<br>KOTA AMBON</div>
+          <div class="tagline">Pengawasan untuk Pemerintahan yang Bersih</div>
         </div>
       </div>
-    </div>
-  </header>
-
-  <!-- SIDEBAR (Berfungsi sebagai Navigasi SPA) -->
-  <nav class="sidebar">
-    <div class="nav-item active" data-target="beranda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Beranda</div>
-    <div class="nav-item" data-target="crud" data-type="Audit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6l6 6v12H3V3h6z"/><path d="M9 3v6h6"/></svg>Audit</div>
-    <div class="nav-item" data-target="crud" data-type="Reviu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Reviu</div>
-    <div class="nav-item" data-target="crud" data-type="Evaluasi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="20" x2="4" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="20" y1="20" x2="20" y2="14"/></svg>Evaluasi</div>
-    <div class="nav-item" data-target="crud" data-type="Pemantauan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>Pemantauan</div>
-    <div class="nav-item" data-target="crud" data-type="Pengawasan Lainnya"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.9 2.9l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.6 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.9-2.9l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.6-1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.9-2.9l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.9 2.9l-.1.1a1.7 1.7 0 00-.3 1.9V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>Pengawasan Lainnya</div>
-    <div class="nav-item" data-target="ilhp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>ILHP</div>
-  </nav>
-
-  <main class="main">
-    
-    <!-- HALAMAN: BERANDA (DASHBOARD) -->
-    <div id="page-beranda" class="page-content active">
-      <div class="kpi-row" id="kpiRow"></div>
-
-      <div class="grid-3">
-        <div class="panel">
-          <div class="panel-head"><h3>Rekapitulasi (Berdasarkan Tahun)</h3></div>
-          <div class="chart-wrap"><canvas id="barRekap"></canvas></div>
-        </div>
-        <div class="panel">
-          <div class="panel-head"><h3>Persentase Pengawasan</h3></div>
-          <div class="donut-flex">
-            <div class="donut-canvas-box">
-              <canvas id="donutPersen"></canvas>
-              <div class="donut-center"><div class="big" id="totalPersen">0</div><div class="small">Total</div></div>
-            </div>
-            <div class="legend" id="legendPersen"></div>
+      <div class="divider"></div>
+      <div class="title-block">
+        <div class="title">DASHBOARD SISTEM INFORMASI PENGAWASAN</div>
+        <div class="subtitle" id="headerSubtitle">Rekapitulasi Hasil Pengawasan</div>
+      </div>
+      <div class="header-right">
+        <div class="header-info">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>
+          <div>
+            <span class="label">Tanggal Update</span>
+            <span class="value" id="tglUpdate">-</span>
           </div>
         </div>
-        <div class="panel">
-          <div class="panel-head"><h3>Tren Kegiatan (2023-2025)</h3></div>
-          <div class="chart-wrap"><canvas id="trenChart"></canvas></div>
-        </div>
-      </div>
-      
-      <div class="grid-3">
-        <div class="panel">
-          <div class="panel-head"><h3>Status Tindak Lanjut</h3></div>
-          <div class="donut-flex">
-            <div class="donut-canvas-box">
-              <canvas id="donutTindak"></canvas>
-              <div class="donut-center"><div class="big" id="pctSelesai">0%</div><div class="small">Selesai</div></div>
-            </div>
-            <div class="legend" id="legendTindak"></div>
+        <div class="header-info">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>
+          <div>
+            <span class="label">Tahun Anggaran</span>
+            <select id="yearFilter" class="year-select" onchange="changeYear(this.value)">
+              <option value="2026">2026</option>
+              <option value="2025">2025</option>
+              <option value="2024">2024</option>
+              <option value="2023">2023</option>
+            </select>
           </div>
         </div>
-        <div class="panel" style="grid-column: span 2;">
-          <div class="panel-head"><h3>Sebaran Objek Pengawasan</h3></div>
-          <div class="chart-wrap"><canvas id="sebaranChart"></canvas></div>
+      </div>
+    </header>
+
+    <!-- SIDEBAR (Berfungsi sebagai Navigasi SPA) -->
+    <nav class="sidebar">
+      <div class="nav-item active" data-target="beranda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2">
+          <path d="M3 11l9-8 9 8" />
+          <path d="M5 10v10h14V10" />
+        </svg>Beranda</div>
+      <div class="nav-item" data-target="crud" data-type="Audit"><svg viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2">
+          <path d="M9 3h6l6 6v12H3V3h6z" />
+          <path d="M9 3v6h6" />
+        </svg>Audit</div>
+      <div class="nav-item" data-target="crud" data-type="Reviu"><svg viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="7" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>Reviu</div>
+      <div class="nav-item" data-target="crud" data-type="Evaluasi"><svg viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2">
+          <line x1="4" y1="20" x2="4" y2="10" />
+          <line x1="12" y1="20" x2="12" y2="4" />
+          <line x1="20" y1="20" x2="20" y2="14" />
+        </svg>Evaluasi</div>
+      <div class="nav-item" data-target="crud" data-type="Pemantauan"><svg viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2">
+          <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>Pemantauan</div>
+      <div class="nav-item" data-target="crud" data-type="Pengawasan Lainnya"><svg viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3" />
+          <path
+            d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.9 2.9l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.6 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.9-2.9l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.6-1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.9-2.9l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.9 2.9l-.1.1a1.7 1.7 0 00-.3 1.9V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z" />
+        </svg>Pengawasan Lainnya</div>
+      <div class="nav-item" data-target="ilhp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+          <path d="M14 2v6h6" />
+          <line x1="9" y1="13" x2="15" y2="13" />
+          <line x1="9" y1="17" x2="15" y2="17" />
+        </svg>ILHP</div>
+    </nav>
+
+    <main class="main">
+
+      <!-- HALAMAN: BERANDA (DASHBOARD) -->
+      <div id="page-beranda" class="page-content active">
+        <div class="kpi-row" id="kpiRow"></div>
+
+        <div class="grid-3">
+          <div class="panel">
+            <div class="panel-head">
+              <h3>Rekapitulasi (Berdasarkan Tahun)</h3>
+            </div>
+            <div class="chart-wrap"><canvas id="barRekap"></canvas></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <h3>Persentase Pengawasan</h3>
+            </div>
+            <div class="donut-flex">
+              <div class="donut-canvas-box">
+                <canvas id="donutPersen"></canvas>
+                <div class="donut-center">
+                  <div class="big" id="totalPersen">0</div>
+                  <div class="small">Total</div>
+                </div>
+              </div>
+              <div class="legend" id="legendPersen"></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <h3>Tren Kegiatan (2023-2025)</h3>
+            </div>
+            <div class="chart-wrap"><canvas id="trenChart"></canvas></div>
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <div class="panel">
+            <div class="panel-head">
+              <h3>Status Tindak Lanjut</h3>
+            </div>
+            <div class="donut-flex">
+              <div class="donut-canvas-box">
+                <canvas id="donutTindak"></canvas>
+                <div class="donut-center">
+                  <div class="big" id="pctSelesai">0%</div>
+                  <div class="small">Selesai</div>
+                </div>
+              </div>
+              <div class="legend" id="legendTindak"></div>
+            </div>
+          </div>
+          <div class="panel" style="grid-column: span 2;">
+            <div class="panel-head">
+              <h3>Sebaran Objek Pengawasan</h3>
+            </div>
+            <div class="chart-wrap"><canvas id="sebaranChart"></canvas></div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- HALAMAN: CRUD DINAMIS (Audit, Reviu, dll) -->
-    <div id="page-crud" class="page-content">
-      <div class="panel">
-        <div class="panel-head">
-          <h3 id="crudTitle">Data Pengawasan</h3>
-          <button class="apply-btn" onclick="openModal()">+ Tambah Data</button>
+      <!-- HALAMAN: CRUD DINAMIS (Audit, Reviu, dll) -->
+      <div id="page-crud" class="page-content">
+        <div class="panel">
+          <div class="panel-head">
+            <h3 id="crudTitle">Data Pengawasan</h3>
+            <button class="apply-btn" onclick="openModal()">+ Tambah Data</button>
+          </div>
+
+          <!-- KUMPULAN FILTER BAR (Akan diatur tampilannya oleh JavaScript) -->
+          <div class="filter-bar" id="auditFilterBar">
+            <label style="font-size: 12px; font-weight: 700;">Filter Kode Temuan:</label>
+            <select id="filterKodeTemuan" onchange="renderCrudPage()">
+              <option value="ALL">Semua Kode</option>
+              <option value="KTTP-1">KTTP-1</option>
+              <option value="KTTP-2">KTTP-2</option>
+              <option value="KTTP-3">KTTP-3</option>
+              <option value="KTTP-4">KTTP-4</option>
+              <option value="KTTP-5">KTTP-5</option>
+              <option value="KSPI-1">KSPI-1</option>
+              <option value="KSPI-2">KSPI-2</option>
+              <option value="KSPI-3">KSPI-3</option>
+              <option value="3E-1">3E-1</option>
+              <option value="3E-2">3E-2</option>
+              <option value="3E-3">3E-3</option>
+            </select>
+          </div>
+
+          <div class="filter-bar" id="reviuFilterBar">
+            <label style="font-size: 12px; font-weight: 700;">Filter Status TL Reviu:</label>
+            <select id="filterStatusReviu" onchange="renderCrudPage()">
+              <option value="ALL">Semua Status</option>
+              <option value="Selesai">Selesai</option>
+              <option value="Dalam Proses">Dalam Proses</option>
+              <option value="Belum Ditindaklanjuti">Belum Ditindaklanjuti</option>
+            </select>
+          </div>
+
+          <div class="filter-bar" id="evaluasiFilterBar">
+            <label style="font-size: 12px; font-weight: 700;">Filter Status TL Evaluasi:</label>
+            <select id="filterStatusEvaluasi" onchange="renderCrudPage()">
+              <option value="ALL">Semua Status</option>
+              <option value="Selesai">Selesai</option>
+              <option value="Dalam Proses">Dalam Proses</option>
+              <option value="Belum Ditindaklanjuti">Belum Ditindaklanjuti</option>
+            </select>
+          </div>
+
+          <div class="filter-bar" id="pantauFilterBar">
+            <label style="font-size: 12px; font-weight: 700;">Filter Status TL Pemantauan:</label>
+            <select id="filterStatusPantau" onchange="renderCrudPage()">
+              <option value="ALL">Semua Status</option>
+              <option value="Selesai">Selesai</option>
+              <option value="Dalam Proses">Dalam Proses</option>
+              <option value="Belum Ditindaklanjuti">Belum Ditindaklanjuti</option>
+            </select>
+          </div>
+
+          <div class="filter-bar" id="lainnyaFilterBar">
+            <label style="font-size: 12px; font-weight: 700;">Filter Status TL Lainnya:</label>
+            <select id="filterStatusLainnya" onchange="renderCrudPage()">
+              <option value="ALL">Semua Status</option>
+              <option value="Selesai">Selesai</option>
+              <option value="Dalam Proses">Dalam Proses</option>
+              <option value="Belum Ditindaklanjuti">Belum Ditindaklanjuti</option>
+            </select>
+          </div>
+          <!-- ============================================== -->
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <!-- PASTIKAN THEAD MEMILIKI ID INI -->
+              <thead id="crudTableHeader">
+              </thead>
+
+              <!-- PASTIKAN TBODY MEMILIKI ID INI -->
+              <tbody id="crudTableBody">
+              </tbody>
+            </table>
+          </div>
         </div>
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th style="width:50px">No</th>
-              <th>Nama Kegiatan</th>
-              <th>Objek (OPD/Desa)</th>
-              <th>Status</th>
-              <th style="width:150px">Aksi</th>
-            </tr>
-          </thead>
-          <tbody id="crudTableBody">
-            <!-- Data injected via JS -->
-          </tbody>
-        </table>
       </div>
-    </div>
 
-    <!-- HALAMAN: ILHP -->
-    <div id="page-ilhp" class="page-content">
-      <div class="panel">
-        <div class="panel-head">
-          <h3>Rekapitulasi Dokumen ILHP</h3>
+      <!-- HALAMAN: ILHP -->
+      <div id="page-ilhp" class="page-content">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Rekapitulasi Dokumen ILHP</h3>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Tahun</th>
+                <th>Jumlah Dokumen</th>
+                <th>Status Penyusunan</th>
+              </tr>
+            </thead>
+            <tbody id="ilhpTableBody"></tbody>
+          </table>
         </div>
-        <table class="data-table">
-          <thead><tr><th>Tahun</th><th>Jumlah Dokumen</th><th>Status Penyusunan</th></tr></thead>
-          <tbody id="ilhpTableBody"></tbody>
-        </table>
       </div>
-    </div>
 
-  </main>
-</div>
+    </main>
+  </div>
 
-<!-- MODAL FORM CRUD -->
-<div class="modal-overlay" id="crudModal">
+<!-- ========================================== -->
+<!-- MODAL VIEW: MELIHAT DETAIL DATA            -->
+<!-- ========================================== -->
+<div class="modal-overlay" id="modalView">
   <div class="modal-box">
-    <h3 id="modalTitle">Tambah Data</h3>
-    <input type="hidden" id="formId">
-    
-    <div class="form-group">
-      <label>Nama Kegiatan</label>
-      <input type="text" id="formNama" placeholder="Contoh: Audit Dana Desa...">
+    <h3 style="margin-bottom: 15px;">Detail Data <span id="viewType" style="color:var(--blue-accent)"></span></h3>
+    <div id="viewContent" style="max-height: 60vh; overflow-y: auto; padding-right: 5px;">
+      <!-- Tabel detail akan digenerate otomatis oleh JS -->
     </div>
-    <div class="form-group">
-      <label>Objek (OPD / Desa)</label>
-      <input type="text" id="formObjek" placeholder="Contoh: Dinas Pendidikan">
-    </div>
-    <div class="form-group">
-      <label>Status</label>
-      <select id="formStatus">
-        <option value="Selesai">Selesai</option>
-        <option value="Dalam Proses">Dalam Proses</option>
-        <option value="Belum Mulai">Belum Mulai</option>
-      </select>
-    </div>
-    <div class="modal-actions">
-      <button class="reset-btn" onclick="closeModal()">Batal</button>
-      <button class="apply-btn" onclick="saveCrudData()">Simpan Data</button>
+    <div class="modal-actions" style="margin-top: 20px;">
+      <button class="reset-btn" onclick="closeAllModals()">Tutup</button>
     </div>
   </div>
 </div>
 
-<!-- Pindahkan pemanggil Chart.js ke bagian bawah body -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
+  <!-- ========================================== -->
+  <!-- MODAL 1: AUDIT (Form Lengkap 14 Kolom)     -->
+  <!-- ========================================== -->
+  <div class="modal-overlay" id="modalAudit">
+    <div class="modal-box wide">
+      <h3>Tambah Data Audit</h3>
+      <input type="hidden" id="audit_id">
+      <div class="grid-form cols-2">
+        <div class="form-group">
+          <label>Kegiatan</label>
+          <select id="audit_nama">
+            <option value="ADTT">ADTT</option>
+            <option value="AUDIT OPERASIONAL">AUDIT OPERASIONAL</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Objek Pemeriksaan</label><input type="text" id="audit_objek"
+            placeholder="Contoh: Dinas Pendidikan"></div>
 
-<script>
-// 1. Deklarasi variabel terlebih dahulu untuk mencegah error inisialisasi
-const STORAGE_KEY = "ambon_multiyear_db_v1";
-let currentYear = "2025";
-let activePageType = null;
-let charts = {};
+        <div class="form-group"><label>Tanggal</label><input type="date" id="audit_tanggal"></div>
+        <div class="form-group"><label>Nomor Surat Tugas</label><input type="text" id="audit_noST"
+            placeholder="Nomor ST..."></div>
 
-// Pengecekan Chart.js
-if (typeof Chart !== 'undefined') {
-    Chart.defaults.font.family = "Segoe UI, Arial, sans-serif";
-    Chart.defaults.color = "#5b6b85";
-} else {
-    console.warn("Chart.js gagal dimuat. Pastikan Anda terhubung ke internet dan tidak ada ekstensi pemblokir iklan yang aktif.");
-}
+        <div class="form-group"><label>Uraian Penugasan</label><input type="text" id="audit_uraian"
+            placeholder="Uraian singkat..."></div>
+        <div class="form-group"><label>Lama Pelaksanaan (Hari)</label><input type="number" id="audit_lama"
+            placeholder="Misal: 14"></div>
 
-const colorMap = { Audit:"#2f6fed", Reviu:"#2fa86a", Evaluasi:"#f0862c", Pemantauan:"#7a5cd6", "Pengawasan Lainnya":"#22b3c2" };
-const kpiBg = { Audit:"bg-audit", Reviu:"bg-reviu", Evaluasi:"bg-evaluasi", Pemantauan:"bg-pemantauan", "Pengawasan Lainnya":"bg-pengawasan", 
-  ILHP:"bg-ilhp" };
-const kpiIcon = {
-  Audit:'<path d="M9 3h6l6 6v12H3V3h6z"/><path d="M9 3v6h6"/>',
-  Reviu:'<circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
-  Evaluasi:'<line x1="4" y1="20" x2="4" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="20" y1="20" x2="20" y2="14"/>',
-  Pemantauan:'<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/>',
-  "Pengawasan Lainnya":'<circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/>',
-  ILHP:'<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/>'
-};
+        <div class="form-group">
+          <label>Kode Kelompok Temuan</label>
+          <select id="audit_kodeTemuan" onchange="autoFillKelompokTemuan()">
+            <option value="">-- Pilih Kode --</option>
+            <option value="KTTP-1">KTTP-1</option>
+            <option value="KTTP-2">KTTP-2</option>
+            <option value="KTTP-3">KTTP-3</option>
+            <option value="KTTP-4">KTTP-4</option>
+            <option value="KTTP-5">KTTP-5</option>
+            <option value="KSPI-1">KSPI-1</option>
+            <option value="KSPI-2">KSPI-2</option>
+            <option value="KSPI-3">KSPI-3</option>
+            <option value="3E-1">3E-1</option>
+            <option value="3E-2">3E-2</option>
+            <option value="3E-3">3E-3</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Kelompok Temuan</label><input type="text" id="audit_kelompokTemuan" readonly
+            style="background:#eef1f6;"></div>
 
-// Data Default Terstruktur per Tahun Anggaran
-const DEFAULT_DATA = {
-  tren: {
-    years: ["2023", "2024", "2025"],
-    series: [
-      {label:"Audit", data:[9, 10, 15]},
-      {label:"Reviu", data:[5, 7, 10]},
-      {label:"Evaluasi", data:[6, 11, 8]},
-      {label:"Pemantauan", data:[8, 13, 14]},
-      {label:"Pengawasan Lainnya", data:[4, 5, 8]}
-    ]
-  },
-  ilhp: [
-    {tahun:2023, jumlah:6, status:"Tersusun"},
-    {tahun:2024, jumlah:5, status:"Tersusun"},
-    {tahun:2025, jumlah:5, status:"Dalam Proses"}
-  ],
-  years: {
-    "2025": {
-      kegiatan: [ {label:"Audit", value:15}, {label:"Reviu", value:10}, {label:"Evaluasi", value:8}, {label:"Pemantauan", value:14}, {label:"Pengawasan Lainnya", value:8} ],
-      tindak: [ {label:"Selesai", value:55, color:"#2fa86a"}, {label:"Dalam Proses", value:12, color:"#f2b23a"}, {label:"Belum", value:5, color:"#e5493f"} ],
-      sebaran: [ {label:"OPD", value:40}, {label:"Desa", value:18}, {label:"UPT", value:6}, {label:"Lainnya", value:3} ]
-    },
-    "2024": {
-      kegiatan: [ {label:"Audit", value:10}, {label:"Reviu", value:7}, {label:"Evaluasi", value:11}, {label:"Pemantauan", value:13}, {label:"Pengawasan Lainnya", value:5} ],
-      tindak: [ {label:"Selesai", value:42, color:"#2fa86a"}, {label:"Dalam Proses", value:8, color:"#f2b23a"}, {label:"Belum", value:2, color:"#e5493f"} ],
-      sebaran: [ {label:"OPD", value:35}, {label:"Desa", value:12}, {label:"UPT", value:4}, {label:"Lainnya", value:2} ]
-    },
-    "2023": {
-      kegiatan: [ {label:"Audit", value:9}, {label:"Reviu", value:5}, {label:"Evaluasi", value:6}, {label:"Pemantauan", value:8}, {label:"Pengawasan Lainnya", value:4} ],
-      tindak: [ {label:"Selesai", value:30, color:"#2fa86a"}, {label:"Dalam Proses", value:4, color:"#f2b23a"}, {label:"Belum", value:1, color:"#e5493f"} ],
-      sebaran: [ {label:"OPD", value:28}, {label:"Desa", value:10}, {label:"UPT", value:3}, {label:"Lainnya", value:1} ]
+        <div class="form-group"><label>Keterangan</label><input type="text" id="audit_keterangan"
+            placeholder="Keterangan temuan..."></div>
+        <div class="form-group"><label>Nilai Temuan (Rp)</label><input type="number" id="audit_nilaiTemuan"
+            onkeyup="hitungPersentase()" value="0"></div>
+
+        <div class="form-group"><label>Nilai Tindak Lanjut (Rp)</label><input type="number" id="audit_nilaiTL"
+            onkeyup="hitungPersentase()" value="0"></div>
+        <div class="form-group"><label>Persentase TL (%)</label><input type="text" id="audit_persentase" readonly
+            style="background:#eef1f6;" value="0%"></div>
+
+        <div class="form-group"><label>Rekomendasi</label><input type="text" id="audit_rekomendasi"
+            placeholder="Rekomendasi tindak lanjut..."></div>
+        <div class="form-group">
+          <label>Status (Tindak Lanjut)</label>
+          <select id="audit_status">
+            <option value="Selesai">Selesai</option>
+            <option value="Dalam Proses">Dalam Proses</option>
+            <option value="Belum Ditindaklanjuti">Belum Ditindaklanjuti</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-actions"><button class="reset-btn" onclick="closeAllModals()">Batal</button><button
+          class="apply-btn" onclick="saveAudit()">Simpan Audit</button></div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL 2: REVIU                             -->
+  <!-- ========================================== -->
+  <div class="modal-overlay" id="modalReviu">
+    <div class="modal-box wide">
+      <h3>Tambah Data Reviu</h3>
+      <input type="hidden" id="reviu_id">
+      <div class="grid-form cols-2">
+        <div class="form-group"><label>Tanggal</label><input type="date" id="reviu_tanggal"></div>
+        <div class="form-group"><label>Nomor Surat Tugas</label><input type="text" id="reviu_noST"
+            placeholder="Nomor ST..."></div>
+        <div class="form-group full-width"><label>Uraian Reviu</label><input type="text" id="reviu_uraian"
+            placeholder="Uraian kegiatan..."></div>
+        <div class="form-group"><label>Jumlah OPD</label><input type="number" id="reviu_jmlOPD" placeholder="Misal: 5">
+        </div>
+        <div class="form-group"><label>Lama Pelaksanaan (Hari)</label><input type="number" id="reviu_lama"
+            placeholder="Misal: 7"></div>
+
+        <div class="form-group"><label>Total Rekomendasi</label><input type="number" id="reviu_totalRek"
+            onkeyup="hitungReviu()" value="0"></div>
+        <div class="form-group"><label>Sudah Ditindaklanjuti</label><input type="number" id="reviu_sudahTL"
+            onkeyup="hitungReviu()" value="0"></div>
+        <div class="form-group"><label>Belum Ditindaklanjuti</label><input type="number" id="reviu_belumTL" readonly
+            style="background:#eef1f6;" value="0"></div>
+        <div class="form-group"><label>Persentase TL (%)</label><input type="text" id="reviu_persentase" readonly
+            style="background:#eef1f6;" value="0%"></div>
+
+        <div class="form-group full-width">
+          <label>Status TL</label>
+          <select id="reviu_status">
+            <option value="Dalam Proses">Dalam Proses</option>
+            <option value="Selesai">Selesai</option>
+            <option value="Belum Ditindaklanjuti">Belum Ditindaklanjuti</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="reset-btn" onclick="closeAllModals()">Batal</button>
+        <button class="apply-btn" onclick="saveReviu()">Simpan Reviu</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL 3: EVALUASI                          -->
+  <!-- ========================================== -->
+  <div class="modal-overlay" id="modalEvaluasi">
+    <div class="modal-box wide">
+      <h3>Tambah Data Evaluasi</h3>
+      <input type="hidden" id="eval_id">
+      <div class="grid-form cols-2">
+        <div class="form-group"><label>Tanggal</label><input type="date" id="eval_tanggal"></div>
+        <div class="form-group"><label>Nomor Surat Tugas</label><input type="text" id="eval_noST"
+            placeholder="Nomor ST..."></div>
+        <div class="form-group full-width"><label>Uraian Evaluasi</label><input type="text" id="eval_uraian"
+            placeholder="Uraian kegiatan..."></div>
+        <div class="form-group"><label>Jumlah OPD</label><input type="number" id="eval_jmlOPD" placeholder="Misal: 5">
+        </div>
+        <div class="form-group"><label>Lama Pelaksanaan (Hari)</label><input type="number" id="eval_lama"
+            placeholder="Misal: 7"></div>
+
+        <div class="form-group"><label>Total Rekomendasi</label><input type="number" id="eval_totalRek"
+            onkeyup="hitungEvaluasi()" value="0"></div>
+        <div class="form-group"><label>Sudah Ditindaklanjuti</label><input type="number" id="eval_sudahTL"
+            onkeyup="hitungEvaluasi()" value="0"></div>
+        <div class="form-group"><label>Belum Ditindaklanjuti</label><input type="number" id="eval_belumTL" readonly
+            style="background:#eef1f6;" value="0"></div>
+        <div class="form-group"><label>Persentase TL (%)</label><input type="text" id="eval_persentase" readonly
+            style="background:#eef1f6;" value="0%"></div>
+
+        <div class="form-group full-width">
+          <label>Status TL</label>
+          <select id="eval_status">
+            <option value="Dalam Proses">Dalam Proses</option>
+            <option value="Selesai">Selesai</option>
+            <option value="Belum Ditindaklanjuti">Belum Ditindaklanjuti</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="reset-btn" onclick="closeAllModals()">Batal</button>
+        <button class="apply-btn" onclick="saveEvaluasi()">Simpan Evaluasi</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL 4: PEMANTAUAN                        -->
+  <!-- ========================================== -->
+  <div class="modal-overlay" id="modalPemantauan">
+    <div class="modal-box wide">
+      <h3>Tambah Data Pemantauan</h3>
+      <input type="hidden" id="pantau_id">
+      <div class="grid-form cols-2">
+        <div class="form-group"><label>Tanggal</label><input type="date" id="pantau_tanggal"></div>
+        <div class="form-group"><label>Nomor Surat Tugas</label><input type="text" id="pantau_noST"
+            placeholder="Nomor ST..."></div>
+        <div class="form-group full-width"><label>Uraian Pemantauan</label><input type="text" id="pantau_uraian"
+            placeholder="Uraian kegiatan..."></div>
+        <div class="form-group"><label>Jumlah OPD</label><input type="number" id="pantau_jmlOPD" placeholder="Misal: 5">
+        </div>
+        <div class="form-group"><label>Lama Pelaksanaan (Hari)</label><input type="number" id="pantau_lama"
+            placeholder="Misal: 7"></div>
+        <div class="form-group"><label>Total Rekomendasi</label><input type="number" id="pantau_totalRek"
+            onkeyup="hitungPemantauan()" value="0"></div>
+        <div class="form-group"><label>Sudah Ditindaklanjuti</label><input type="number" id="pantau_sudahTL"
+            onkeyup="hitungPemantauan()" value="0"></div>
+        <div class="form-group"><label>Belum Ditindaklanjuti</label><input type="number" id="pantau_belumTL" readonly
+            style="background:#eef1f6;" value="0"></div>
+        <div class="form-group"><label>Persentase TL (%)</label><input type="text" id="pantau_persentase" readonly
+            style="background:#eef1f6;" value="0%"></div>
+        <div class="form-group full-width">
+          <label>Status TL</label>
+          <select id="pantau_status">
+            <option value="Dalam Proses">Dalam Proses</option>
+            <option value="Selesai">Selesai</option>
+            <option value="Belum Ditindaklanjuti">Belum Ditindaklanjuti</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-actions"><button class="reset-btn" onclick="closeAllModals()">Batal</button><button
+          class="apply-btn" onclick="savePemantauan()">Simpan Pemantauan</button></div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL 5: PENGAWASAN LAINNYA                -->
+  <!-- ========================================== -->
+  <div class="modal-overlay" id="modalLainnya">
+    <div class="modal-box wide">
+      <h3>Tambah Data Pengawasan Lainnya</h3>
+      <input type="hidden" id="lain_id">
+      <div class="grid-form cols-2">
+        <div class="form-group"><label>Tanggal</label><input type="date" id="lain_tanggal"></div>
+        <div class="form-group"><label>Nomor Surat Tugas</label><input type="text" id="lain_noST"
+            placeholder="Nomor ST..."></div>
+        <div class="form-group full-width"><label>Uraian</label><input type="text" id="lain_uraian"
+            placeholder="Uraian kegiatan..."></div>
+        <div class="form-group"><label>Jumlah OPD</label><input type="number" id="lain_jmlOPD" placeholder="Misal: 5">
+        </div>
+        <div class="form-group"><label>Lama Pelaksanaan (Hari)</label><input type="number" id="lain_lama"
+            placeholder="Misal: 7"></div>
+        <div class="form-group"><label>Total Rekomendasi</label><input type="number" id="lain_totalRek"
+            onkeyup="hitungLainnya()" value="0"></div>
+        <div class="form-group"><label>Sudah Ditindaklanjuti</label><input type="number" id="lain_sudahTL"
+            onkeyup="hitungLainnya()" value="0"></div>
+        <div class="form-group"><label>Belum Ditindaklanjuti</label><input type="number" id="lain_belumTL" readonly
+            style="background:#eef1f6;" value="0"></div>
+        <div class="form-group"><label>Persentase TL (%)</label><input type="text" id="lain_persentase" readonly
+            style="background:#eef1f6;" value="0%"></div>
+        <div class="form-group full-width">
+          <label>Status TL</label>
+          <select id="lain_status">
+            <option value="Dalam Proses">Dalam Proses</option>
+            <option value="Selesai">Selesai</option>
+            <option value="Belum Ditindaklanjuti">Belum Ditindaklanjuti</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-actions"><button class="reset-btn" onclick="closeAllModals()">Batal</button><button
+          class="apply-btn" onclick="saveLainnya()">Simpan Data</button></div>
+    </div>
+  </div>
+
+  <!-- Pindahkan pemanggil Chart.js ke bagian bawah body -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
+
+  <script>
+    // 1. Deklarasi variabel terlebih dahulu untuk mencegah error inisialisasi
+    // 1. Deklarasi variabel terlebih dahulu untuk mencegah error inisialisasi
+    const STORAGE_KEY = "ambon_multiyear_db_v3"; // UBAH KE v3 AGAR BROWSER MERESET CACHE LAMA
+    let currentYear = "2026";
+    let activePageType = null;
+    let charts = {};
+
+    // Pengecekan Chart.js
+    if (typeof Chart !== 'undefined') {
+      Chart.defaults.font.family = "Segoe UI, Arial, sans-serif";
+      Chart.defaults.color = "#5b6b85";
+    } else {
+      console.warn("Chart.js gagal dimuat. Pastikan Anda terhubung ke internet dan tidak ada ekstensi pemblokir iklan yang aktif.");
     }
-  },
-  crudData: {
-    "2025": {
-      "Audit": [ {id:1, nama:"Audit Reguler Dinas Pendidikan", objek:"Dinas Pendidikan", status:"Dalam Proses"} ],
-      "Reviu": [ {id:2, nama:"Reviu RKA Bappeda", objek:"Bappeda", status:"Selesai"} ],
-      "Evaluasi": [], "Pemantauan": [], "Pengawasan Lainnya": []
-    },
-    "2024": { "Audit": [], "Reviu": [], "Evaluasi": [], "Pemantauan": [], "Pengawasan Lainnya": [] },
-    "2023": { "Audit": [], "Reviu": [], "Evaluasi": [], "Pemantauan": [], "Pengawasan Lainnya": [] }
-  }
-};
 
-let state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || JSON.parse(JSON.stringify(DEFAULT_DATA));
+    const colorMap = { Audit: "#2f6fed", Reviu: "#2fa86a", Evaluasi: "#f0862c", Pemantauan: "#7a5cd6", "Pengawasan Lainnya": "#22b3c2" };
+    const kpiBg = {
+      Audit: "bg-audit", Reviu: "bg-reviu", Evaluasi: "bg-evaluasi", Pemantauan: "bg-pemantauan", "Pengawasan Lainnya": "bg-pengawasan",
+      ILHP: "bg-ilhp"
+    };
+    const kpiIcon = {
+      Audit: '<path d="M9 3h6l6 6v12H3V3h6z"/><path d="M9 3v6h6"/>',
+      Reviu: '<circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+      Evaluasi: '<line x1="4" y1="20" x2="4" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="20" y1="20" x2="20" y2="14"/>',
+      Pemantauan: '<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/>',
+      "Pengawasan Lainnya": '<circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/>',
+      ILHP: '<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/>'
+    };
 
-// ==========================================
-// MENDENGARKAN EVENT (Mengganti inline HTML)
-// ==========================================
-document.getElementById('yearFilter').addEventListener('change', function(e) {
-  changeYear(e.target.value);
-});
+    // Data Default Terstruktur per Tahun Anggaran
+    const DEFAULT_DATA = {
+      tren: {
+        years: ["2023", "2024", "2025", "2026"],
+        series: [
+          { label: "Audit", data: [9, 10, 0, 15] },       // Data dipindah ke indeks 2026
+          { label: "Reviu", data: [5, 7, 0, 10] },
+          { label: "Evaluasi", data: [6, 11, 0, 8] },
+          { label: "Pemantauan", data: [8, 13, 0, 14] },
+          { label: "Pengawasan Lainnya", data: [4, 5, 0, 8] }
+        ]
+      },
+      ilhp: [
+        { tahun: 2023, jumlah: 6, status: "Tersusun" },
+        { tahun: 2024, jumlah: 5, status: "Tersusun" },
+        { tahun: 2025, jumlah: 0, status: "Belum Tersusun" },
+        { tahun: 2026, jumlah: 5, status: "Dalam Proses" } // Data dipindah ke 2026
+      ],
+      years: {
+        "2026": { // 2026 SEKARANG BERISI DATA PENUH
+          kegiatan: [{ label: "Audit", value: 15 }, { label: "Reviu", value: 10 }, { label: "Evaluasi", value: 8 }, { label: "Pemantauan", value: 14 }, { label: "Pengawasan Lainnya", value: 8 }],
+          tindak: [{ label: "Selesai", value: 55, color: "#2fa86a" }, { label: "Dalam Proses", value: 12, color: "#f2b23a" }, { label: "Belum", value: 5, color: "#e5493f" }],
+          sebaran: [{ label: "OPD", value: 40 }, { label: "Desa", value: 18 }, { label: "UPT", value: 6 }, { label: "Lainnya", value: 3 }]
+        },
+        "2025": { // 2025 DIKOSONGKAN
+          kegiatan: [{ label: "Audit", value: 0 }, { label: "Reviu", value: 0 }, { label: "Evaluasi", value: 0 }, { label: "Pemantauan", value: 0 }, { label: "Pengawasan Lainnya", value: 0 }],
+          tindak: [{ label: "Selesai", value: 0, color: "#2fa86a" }, { label: "Dalam Proses", value: 0, color: "#f2b23a" }, { label: "Belum", value: 0, color: "#e5493f" }],
+          sebaran: [{ label: "OPD", value: 0 }, { label: "Desa", value: 0 }, { label: "UPT", value: 0 }, { label: "Lainnya", value: 0 }]
+        },
+        "2024": {
+          kegiatan: [{ label: "Audit", value: 10 }, { label: "Reviu", value: 7 }, { label: "Evaluasi", value: 11 }, { label: "Pemantauan", value: 13 }, { label: "Pengawasan Lainnya", value: 5 }],
+          tindak: [{ label: "Selesai", value: 42, color: "#2fa86a" }, { label: "Dalam Proses", value: 8, color: "#f2b23a" }, { label: "Belum", value: 2, color: "#e5493f" }],
+          sebaran: [{ label: "OPD", value: 35 }, { label: "Desa", value: 12 }, { label: "UPT", value: 4 }, { label: "Lainnya", value: 2 }]
+        },
+        "2023": {
+          kegiatan: [{ label: "Audit", value: 9 }, { label: "Reviu", value: 5 }, { label: "Evaluasi", value: 6 }, { label: "Pemantauan", value: 8 }, { label: "Pengawasan Lainnya", value: 4 }],
+          tindak: [{ label: "Selesai", value: 30, color: "#2fa86a" }, { label: "Dalam Proses", value: 4, color: "#f2b23a" }, { label: "Belum", value: 1, color: "#e5493f" }],
+          sebaran: [{ label: "OPD", value: 28 }, { label: "Desa", value: 10 }, { label: "UPT", value: 3 }, { label: "Lainnya", value: 1 }]
+        }
+      },
+      crudData: {
+        "2026": { // TABEL CRUD PINDAH KE SINI
+          "Audit": [{ id: 1, nama: "AUDIT", objek: "Dinas Pendidikan", status: "Dalam Proses" }],
+          "Reviu": [{ id: 2, nama: "Reviu RKA Bappeda", objek: "Bappeda", status: "Selesai" }],
+          "Evaluasi": [], "Pemantauan": [], "Pengawasan Lainnya": []
+        },
+        "2025": { "Audit": [], "Reviu": [], "Evaluasi": [], "Pemantauan": [], "Pengawasan Lainnya": [] }, // 2025 KOSONG
+        "2024": { "Audit": [], "Reviu": [], "Evaluasi": [], "Pemantauan": [], "Pengawasan Lainnya": [] },
+        "2023": { "Audit": [], "Reviu": [], "Evaluasi": [], "Pemantauan": [], "Pengawasan Lainnya": [] }
+      }
+    };
 
-// === SISTEM NAVIGASI (SPA) ===
-document.querySelectorAll('.sidebar .nav-item').forEach(item => {
-  item.addEventListener('click', () => {
-    document.querySelectorAll('.sidebar .nav-item').forEach(n => n.classList.remove('active'));
-    item.classList.add('active');
-    
-    const target = item.dataset.target;
-    document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
-    document.getElementById('page-' + target).classList.add('active');
-    
-    if(target === 'beranda') {
-      document.getElementById('headerSubtitle').innerText = "Dashboard Rekapitulasi";
-      renderDashboard();
-    } else if (target === 'crud') {
-      activePageType = item.dataset.type;
-      document.getElementById('headerSubtitle').innerText = "Manajemen Data - " + activePageType;
-      renderCrudPage();
-    } else if (target === 'ilhp') {
-      document.getElementById('headerSubtitle').innerText = "Data ILHP";
-      renderIlhpPage();
+    let state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || JSON.parse(JSON.stringify(DEFAULT_DATA));
+
+    // ==========================================
+    // MENDENGARKAN EVENT (Mengganti inline HTML)
+    // ==========================================
+    document.getElementById('yearFilter').addEventListener('change', function (e) {
+      changeYear(e.target.value);
+    });
+
+    // === SISTEM NAVIGASI (SPA) ===
+    document.querySelectorAll('.sidebar .nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.sidebar .nav-item').forEach(n => n.classList.remove('active'));
+        item.classList.add('active');
+
+        const target = item.dataset.target;
+        document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+        document.getElementById('page-' + target).classList.add('active');
+
+        if (target === 'beranda') {
+          document.getElementById('headerSubtitle').innerText = "Dashboard Rekapitulasi";
+          renderDashboard();
+        } else if (target === 'crud') {
+          activePageType = item.dataset.type;
+          document.getElementById('headerSubtitle').innerText = "Manajemen Data - " + activePageType;
+          renderCrudPage();
+        } else if (target === 'ilhp') {
+          document.getElementById('headerSubtitle').innerText = "Data ILHP";
+          renderIlhpPage();
+        }
+      });
+    });
+
+    // === LOGIC TAHUN ANGGARAN ===
+    function changeYear(year) {
+      currentYear = year;
+      if (document.getElementById('page-beranda').classList.contains('active')) {
+        renderDashboard();
+      } else if (document.getElementById('page-crud').classList.contains('active')) {
+        renderCrudPage();
+      }
     }
-  });
-});
 
-// === LOGIC TAHUN ANGGARAN ===
-function changeYear(year) {
-  currentYear = year;
-  if (document.getElementById('page-beranda').classList.contains('active')) {
-    renderDashboard();
-  } else if (document.getElementById('page-crud').classList.contains('active')) {
-    renderCrudPage();
-  }
-}
+    // === RENDER DASHBOARD ===
+    function renderDashboard() {
+      const yData = state.years[currentYear];
 
-// === RENDER DASHBOARD ===
-function renderDashboard() {
-  const yData = state.years[currentYear];
+      const currentIlhp = state.ilhp.find(i => i.tahun == currentYear);
+      const jumlahIlhp = currentIlhp ? currentIlhp.jumlah : 0;
 
-  const currentIlhp = state.ilhp.find(i => i.tahun == currentYear);
-  const jumlahIlhp = currentIlhp ? currentIlhp.jumlah : 0;
-  
-  // 1. Render KPI (Kegiatan + ILHP)
-  let kpiHtml = yData.kegiatan.map(k => `
+      // 1. Render KPI (Kegiatan + ILHP)
+      let kpiHtml = yData.kegiatan.map(k => `
     <div class="kpi-card ${kpiBg[k.label]}">
       <div class="kpi-top">
         <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">${kpiIcon[k.label]}</svg></div>
@@ -521,8 +1232,8 @@ function renderDashboard() {
     </div>
   `).join("");
 
-  // Tambahkan Kartu KPI Khusus ILHP di akhir grid
-  kpiHtml += `
+      // Tambahkan Kartu KPI Khusus ILHP di akhir grid
+      kpiHtml += `
     <div class="kpi-card ${kpiBg['ILHP']}">
       <div class="kpi-top">
         <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">${kpiIcon['ILHP']}</svg></div>
@@ -532,194 +1243,698 @@ function renderDashboard() {
     </div>
   `;
 
-  document.getElementById("kpiRow").innerHTML = kpiHtml;
+      document.getElementById("kpiRow").innerHTML = kpiHtml;
 
-  // Cegah render chart jika Chart.js gagal diload karena tidak ada internet
-  if (typeof Chart === 'undefined') return;
+      // Cegah render chart jika Chart.js gagal diload karena tidak ada internet
+      if (typeof Chart === 'undefined') return;
 
-  // 2. Bar Chart
-  const barCtx = document.getElementById("barRekap");
-  if(charts.bar){ 
-    charts.bar.data.datasets[0].data = yData.kegiatan.map(k=>k.value); charts.bar.update(); 
-  } else {
-    charts.bar = new Chart(barCtx, {
-      type:'bar',
-      data:{ labels:yData.kegiatan.map(k=>k.label), datasets:[{ data:yData.kegiatan.map(k=>k.value), backgroundColor:Object.values(colorMap), borderRadius:4 }] },
-      options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false} }, scales:{ x:{grid:{display:false}} } }
-    });
-  }
+      // 2. Bar Chart
+      const barCtx = document.getElementById("barRekap");
+      if (charts.bar) {
+        charts.bar.data.datasets[0].data = yData.kegiatan.map(k => k.value); charts.bar.update();
+      } else {
+        charts.bar = new Chart(barCtx, {
+          type: 'bar',
+          data: { labels: yData.kegiatan.map(k => k.label), datasets: [{ data: yData.kegiatan.map(k => k.value), backgroundColor: Object.values(colorMap), borderRadius: 4 }] },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } } } }
+        });
+      }
 
-  // 3. Donut Persentase
-  const totalKeg = yData.kegiatan.reduce((s,k)=>s+Number(k.value),0);
-  document.getElementById("totalPersen").innerText = totalKeg;
-  if(charts.donutPersen){
-    charts.donutPersen.data.datasets[0].data = yData.kegiatan.map(k=>k.value); charts.donutPersen.update();
-  } else {
-    charts.donutPersen = new Chart(document.getElementById("donutPersen"), {
-      type:'doughnut',
-      data:{ labels:yData.kegiatan.map(k=>k.label), datasets:[{ data:yData.kegiatan.map(k=>k.value), backgroundColor:Object.values(colorMap), borderWidth:2 }] },
-      options:{ responsive:true, maintainAspectRatio:false, cutout:'65%', plugins:{ legend:{display:false} } }
-    });
-  }
-  document.getElementById("legendPersen").innerHTML = yData.kegiatan.map((k,i)=>`
+      // 3. Donut Persentase
+      const totalKeg = yData.kegiatan.reduce((s, k) => s + Number(k.value), 0);
+      document.getElementById("totalPersen").innerText = totalKeg;
+      if (charts.donutPersen) {
+        charts.donutPersen.data.datasets[0].data = yData.kegiatan.map(k => k.value); charts.donutPersen.update();
+      } else {
+        charts.donutPersen = new Chart(document.getElementById("donutPersen"), {
+          type: 'doughnut',
+          data: { labels: yData.kegiatan.map(k => k.label), datasets: [{ data: yData.kegiatan.map(k => k.value), backgroundColor: Object.values(colorMap), borderWidth: 2 }] },
+          options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { display: false } } }
+        });
+      }
+      document.getElementById("legendPersen").innerHTML = yData.kegiatan.map((k, i) => `
     <div class="legend-item"><span class="legend-dot" style="background:${Object.values(colorMap)[i]}"></span>
     <span style="flex:1;color:var(--text-mid)">${k.label}</span><strong>${k.value}</strong></div>
   `).join("");
 
-  // 4. Tren Chart (Lintas Tahun)
-  if(!charts.tren) {
-    const t = state.tren;
-    const datasets = t.series.map((s,i)=>({ type:'bar', label:s.label, data:s.data, backgroundColor:Object.values(colorMap)[i] }));
-    charts.tren = new Chart(document.getElementById("trenChart"), {
-      data:{ labels:t.years, datasets },
-      options:{ responsive:true, maintainAspectRatio:false, scales:{ x:{grid:{display:false}} } }
-    });
-  }
+      // 4. Tren Chart (Lintas Tahun)
+      if (!charts.tren) {
+        const t = state.tren;
+        const datasets = t.series.map((s, i) => ({ type: 'bar', label: s.label, data: s.data, backgroundColor: Object.values(colorMap)[i] }));
+        charts.tren = new Chart(document.getElementById("trenChart"), {
+          data: { labels: t.years, datasets },
+          options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { display: false } } } }
+        });
+      }
 
-  // 5. Donut Tindak Lanjut
-  const totalTindak = yData.tindak.reduce((s,t)=>s+t.value,0);
-  const pct = totalTindak > 0 ? Math.round((yData.tindak[0].value/totalTindak)*100) : 0;
-  document.getElementById("pctSelesai").innerText = pct + "%";
-  if(charts.donutTindak){
-    charts.donutTindak.data.datasets[0].data = yData.tindak.map(t=>t.value); charts.donutTindak.update();
-  } else {
-    charts.donutTindak = new Chart(document.getElementById("donutTindak"), {
-      type:'doughnut',
-      data:{ labels:yData.tindak.map(t=>t.label), datasets:[{ data:yData.tindak.map(t=>t.value), backgroundColor:yData.tindak.map(t=>t.color) }] },
-      options:{ responsive:true, maintainAspectRatio:false, cutout:'65%', plugins:{ legend:{display:false} } }
-    });
-  }
-  document.getElementById("legendTindak").innerHTML = yData.tindak.map(t=>`
+      // 5. Donut Tindak Lanjut
+      const totalTindak = yData.tindak.reduce((s, t) => s + t.value, 0);
+      const pct = totalTindak > 0 ? Math.round((yData.tindak[0].value / totalTindak) * 100) : 0;
+      document.getElementById("pctSelesai").innerText = pct + "%";
+      if (charts.donutTindak) {
+        charts.donutTindak.data.datasets[0].data = yData.tindak.map(t => t.value); charts.donutTindak.update();
+      } else {
+        charts.donutTindak = new Chart(document.getElementById("donutTindak"), {
+          type: 'doughnut',
+          data: { labels: yData.tindak.map(t => t.label), datasets: [{ data: yData.tindak.map(t => t.value), backgroundColor: yData.tindak.map(t => t.color) }] },
+          options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { display: false } } }
+        });
+      }
+      document.getElementById("legendTindak").innerHTML = yData.tindak.map(t => `
     <div class="legend-item"><span class="legend-dot" style="background:${t.color}"></span>
     <span style="flex:1;color:var(--text-mid)">${t.label}</span><strong>${t.value}</strong></div>
   `).join("");
 
-  // 6. Bar Sebaran
-  if(charts.sebaran){
-    charts.sebaran.data.datasets[0].data = yData.sebaran.map(s=>s.value); charts.sebaran.update();
-  } else {
-    charts.sebaran = new Chart(document.getElementById("sebaranChart"), {
-      type:'bar',
-      data:{ labels:yData.sebaran.map(s=>s.label), datasets:[{ data:yData.sebaran.map(s=>s.value), backgroundColor:Object.values(colorMap), borderRadius:4 }] },
-      options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false} } }
-    });
-  }
-}
+      // 6. Bar Sebaran
+      if (charts.sebaran) {
+        charts.sebaran.data.datasets[0].data = yData.sebaran.map(s => s.value); charts.sebaran.update();
+      } else {
+        charts.sebaran = new Chart(document.getElementById("sebaranChart"), {
+          type: 'bar',
+          data: { labels: yData.sebaran.map(s => s.label), datasets: [{ data: yData.sebaran.map(s => s.value), backgroundColor: Object.values(colorMap), borderRadius: 4 }] },
+          options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+        });
+      }
+    }
 
-// === SISTEM CRUD ===
-function renderCrudPage() {
-  document.getElementById("crudTitle").innerText = `Daftar Kegiatan ${activePageType} - Tahun ${currentYear}`;
-  const dataList = state.crudData[currentYear][activePageType] || [];
-  
-  const tbody = document.getElementById("crudTableBody");
-  if(dataList.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:20px;">Belum ada data ${activePageType} untuk tahun ${currentYear}.</td></tr>`;
-    return;
-  }
+    // === SISTEM CRUD ===
+    // === FUNGSI BANTUAN AUDIT ===
+    function autoFillKelompokTemuan() {
+      const kode = document.getElementById("audit_kodeTemuan").value;
+      document.getElementById("audit_kelompokTemuan").value = kodeTemuanMap[kode] || "";
+    }
+    function hitungPersentase() {
+      const t = parseFloat(document.getElementById("audit_nilaiTemuan").value) || 0;
+      const tl = parseFloat(document.getElementById("audit_nilaiTL").value) || 0;
+      document.getElementById("audit_persentase").value = (t > 0 ? ((tl / t) * 100).toFixed(2) : 0) + "%";
+    }
+    function getStatusBadge(status) {
+      return `<span style="padding:4px 10px;border-radius:12px;font-size:11px;font-weight:700;
+          background:${status === 'Selesai' ? '#d5f2e2' : (status === 'Dalam Proses' ? '#fdecc4' : '#fcdbdb')};
+          color:${status === 'Selesai' ? '#1f8a52' : (status === 'Dalam Proses' ? '#b0791a' : '#c0392b')}">${status}</span>`;
+    }
+    // === KONFIGURASI NAMA LABEL UNTUK MODAL VIEW ===
+const viewLabels = {
+  nama: "Nama Kegiatan", objek: "Objek / OPD", tanggal: "Tanggal", noST: "Nomor ST",
+  uraian: "Uraian Penugasan", lama: "Lama Pelaksanaan", kodeTemuan: "Kode Temuan",
+  kelompokTemuan: "Kelompok Temuan", keterangan: "Keterangan",
+  nilaiTemuan: "Nilai Temuan", nilaiTL: "Nilai Tindak Lanjut",
+  persentase: "Persentase TL", rekomendasi: "Rekomendasi", status: "Status TL",
+  ruangLingkup: "Ruang Lingkup", hasil: "Hasil / Nilai",
+  jmlOPD: "Jumlah OPD", totalRek: "Total Rekomendasi",
+  sudahTL: "Sudah Ditindaklanjuti", belumTL: "Belum Ditindaklanjuti", progres: "Progres (%)"
+};
 
-  tbody.innerHTML = dataList.map((item, index) => `
-    <tr>
-      <td>${index + 1}</td>
-      <td style="font-weight:600;color:var(--text-dark)">${item.nama}</td>
-      <td>${item.objek}</td>
-      <td><span style="padding:4px 10px;border-radius:12px;font-size:11px;font-weight:700;
-          background:${item.status==='Selesai'?'#d5f2e2':(item.status==='Dalam Proses'?'#fdecc4':'#fcdbdb')};
-          color:${item.status==='Selesai'?'#1f8a52':(item.status==='Dalam Proses'?'#b0791a':'#c0392b')}">${item.status}</span></td>
-      <td>
-        <button onclick="editCrudData(${item.id})" class="apply-btn" style="padding:5px 10px;font-size:11px;">Edit</button>
-        <button onclick="deleteCrudData(${item.id})" class="reset-btn" style="padding:5px 10px;font-size:11px;margin-left:4px;">Hapus</button>
-      </td>
-    </tr>
-  `).join("");
-}
-
-function openModal() {
-  document.getElementById("formId").value = "";
-  document.getElementById("formNama").value = "";
-  document.getElementById("formObjek").value = "";
-  document.getElementById("formStatus").value = "Dalam Proses";
-  document.getElementById("modalTitle").innerText = `Tambah ${activePageType} (${currentYear})`;
-  document.getElementById("crudModal").classList.add("active");
-}
-
-function closeModal() { document.getElementById("crudModal").classList.remove("active"); }
-
-function saveCrudData() {
-  const id = document.getElementById("formId").value;
-  const nama = document.getElementById("formNama").value;
-  const objek = document.getElementById("formObjek").value;
-  const status = document.getElementById("formStatus").value;
-
-  if(!nama || !objek) return alert("Nama kegiatan dan Objek harus diisi!");
-
-  let dataList = state.crudData[currentYear][activePageType];
-  
-  if(id) {
-    const idx = dataList.findIndex(d => d.id == id);
-    if(idx > -1) { dataList[idx] = { id:Number(id), nama, objek, status }; }
-  } else {
-    const newId = new Date().getTime();
-    dataList.push({ id:newId, nama, objek, status });
-  }
-
-  const kpiIdx = state.years[currentYear].kegiatan.findIndex(k => k.label === activePageType);
-  if(kpiIdx > -1) { state.years[currentYear].kegiatan[kpiIdx].value = dataList.length; }
-
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  closeModal();
-  renderCrudPage();
-}
-
-function editCrudData(id) {
+// === FUNGSI MELIHAT DETAIL DATA ===
+function viewCrudData(id) {
   const item = state.crudData[currentYear][activePageType].find(d => d.id == id);
-  if(!item) return;
-  document.getElementById("formId").value = item.id;
-  document.getElementById("formNama").value = item.nama;
-  document.getElementById("formObjek").value = item.objek;
-  document.getElementById("formStatus").value = item.status;
-  document.getElementById("modalTitle").innerText = `Edit ${activePageType} (${currentYear})`;
-  document.getElementById("crudModal").classList.add("active");
+  if (!item) return;
+
+  document.getElementById("viewType").innerText = activePageType;
+  
+  let html = `<table style="width:100%; border-collapse: collapse; font-size:13px;">`;
+  
+  // Looping otomatis untuk semua data yang ada pada objek tersebut
+  for (const key in item) {
+    if (key === 'id' || item[key] === "") continue; // Sembunyikan ID atau data kosong
+    
+    let label = viewLabels[key] || key;
+    let val = item[key];
+    
+    // Formatting khusus agar lebih rapi saat dilihat
+    if(key === 'nilaiTemuan' || key === 'nilaiTL') val = "Rp " + Number(val||0).toLocaleString('id-ID');
+    if(key === 'status') val = getStatusBadge(val);
+    if(key === 'lama' && val) val = val + " Hari";
+    
+    html += `
+      <tr>
+        <td style="padding:10px 0; border-bottom:1px solid #eef1f6; font-weight:700; width:45%; color:var(--text-mid); vertical-align:top;">${label}</td>
+        <td style="padding:10px 0; border-bottom:1px solid #eef1f6; color:var(--text-dark); vertical-align:top;">${val || '-'}</td>
+      </tr>`;
+  }
+  
+  html += `</table>`;
+  document.getElementById("viewContent").innerHTML = html;
+  document.getElementById("modalView").classList.add("active");
 }
 
-function deleteCrudData(id) {
-  if(!confirm("Yakin ingin menghapus data ini?")) return;
-  let dataList = state.crudData[currentYear][activePageType];
-  state.crudData[currentYear][activePageType] = dataList.filter(d => d.id != id);
-  
-  const kpiIdx = state.years[currentYear].kegiatan.findIndex(k => k.label === activePageType);
-  if(kpiIdx > -1) { state.years[currentYear].kegiatan[kpiIdx].value = state.crudData[currentYear][activePageType].length; }
-  
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  renderCrudPage();
+// === FUNGSI TOMBOL AKSI (MENGGUNAKAN IKON SVG) ===
+function actionButtons(id) {
+  return `
+    <div class="action-group">
+      <!-- TOMBOL LIHAT (Ikon Mata) -->
+      <button onclick="viewCrudData(${id})" class="icon-btn btn-view" title="Lihat Detail">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+      </button>
+
+      <!-- TOMBOL EDIT (Ikon Pensil) -->
+      <button onclick="editCrudData(${id})" class="icon-btn btn-edit" title="Edit Data">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+        </svg>
+      </button>
+
+      <!-- TOMBOL HAPUS (Ikon Tempat Sampah) -->
+      <button onclick="deleteCrudData(${id})" class="icon-btn btn-delete" title="Hapus Data">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="3 6 5 6 21 6"></polyline>
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+        </svg>
+      </button>
+    </div>
+  `;
 }
 
-function renderIlhpPage() {
-  document.getElementById("ilhpTableBody").innerHTML = state.ilhp.map(item => `
+    // Fungsi kalkulasi otomatis untuk Reviu
+    // Fungsi kalkulasi otomatis untuk Evaluasi
+    function hitungEvaluasi() {
+      const totalRek = parseFloat(document.getElementById("eval_totalRek").value) || 0;
+      const sudahTL = parseFloat(document.getElementById("eval_sudahTL").value) || 0;
+
+      const belumTL = totalRek - sudahTL;
+      document.getElementById("eval_belumTL").value = belumTL < 0 ? 0 : belumTL;
+
+      let persentase = 0;
+      if (totalRek > 0) {
+        persentase = (sudahTL / totalRek) * 100;
+      }
+      document.getElementById("eval_persentase").value = persentase.toFixed(2) + "%";
+    }
+
+    // Fungsi kalkulasi otomatis untuk Pemantauan
+    function hitungPemantauan() {
+      const totalRek = parseFloat(document.getElementById("pantau_totalRek").value) || 0;
+      const sudahTL = parseFloat(document.getElementById("pantau_sudahTL").value) || 0;
+      const belumTL = totalRek - sudahTL;
+      document.getElementById("pantau_belumTL").value = belumTL < 0 ? 0 : belumTL;
+      let persentase = 0;
+      if (totalRek > 0) persentase = (sudahTL / totalRek) * 100;
+      document.getElementById("pantau_persentase").value = persentase.toFixed(2) + "%";
+    }
+
+    // Fungsi kalkulasi otomatis untuk Pengawasan Lainnya
+    function hitungLainnya() {
+      const totalRek = parseFloat(document.getElementById("lain_totalRek").value) || 0;
+      const sudahTL = parseFloat(document.getElementById("lain_sudahTL").value) || 0;
+      const belumTL = totalRek - sudahTL;
+      document.getElementById("lain_belumTL").value = belumTL < 0 ? 0 : belumTL;
+      let persentase = 0;
+      if (totalRek > 0) persentase = (sudahTL / totalRek) * 100;
+      document.getElementById("lain_persentase").value = persentase.toFixed(2) + "%";
+    }
+
+    // Kamus Data Kelompok Temuan
+    const kodeTemuanMap = {
+      "KTTP-1": "Kerugian Negara/Daerah",
+      "KTTP-2": "Potensi Kerugian Negara/Daerah",
+      "KTTP-3": "Kekurangan Penerimaan Negara/Daerah",
+      "KTTP-4": "Administrasi",
+      "KTTP-5": "Indikasi Tindak Pidana",
+      "KSPI-1": "Pengendalian Akuntansi dan Pelaporan",
+      "KSPI-2": "Pelaksanaan Anggaran",
+      "KSPI-3": "Struktur Pengendalian Intern",
+      "3E-1": "Ketidakhematan/Pemborosan/Ketidakekonomisan",
+      "3E-2": "Ketidakefesienan",
+      "3E-3": "Ketidakefektidan"
+    };
+
+    function renderCrudPage() {
+      document.getElementById("crudTitle").innerText = `Daftar Kegiatan ${activePageType} - Tahun ${currentYear}`;
+      let dataList = state.crudData[currentYear][activePageType] || [];
+      const tbody = document.getElementById("crudTableBody");
+      const thead = document.getElementById("crudTableHeader");
+
+      // 1. SEMBUNYIKAN SEMUA FILTER SECARA PAKSA
+      document.querySelectorAll(".filter-bar").forEach(el => {
+        el.style.display = "none";
+      });
+
+      // 2. MUNCULKAN HANYA FILTER YANG SESUAI PAGE AKTIF (display = "flex")
+      if (activePageType === 'Audit') {
+        const filterEl = document.getElementById("auditFilterBar");
+        if (filterEl) filterEl.style.display = "flex";
+
+        const val = document.getElementById("filterKodeTemuan").value;
+        if (val !== "ALL") dataList = dataList.filter(d => d.kodeTemuan === val);
+      }
+      else if (activePageType === 'Reviu') {
+        const filterEl = document.getElementById("reviuFilterBar");
+        if (filterEl) filterEl.style.display = "flex";
+
+        const val = document.getElementById("filterStatusReviu").value;
+        if (val !== "ALL") dataList = dataList.filter(d => d.status === val);
+      }
+      else if (activePageType === 'Evaluasi') {
+        const filterEl = document.getElementById("evaluasiFilterBar");
+        if (filterEl) filterEl.style.display = "flex";
+
+        const val = document.getElementById("filterStatusEvaluasi").value;
+        if (val !== "ALL") dataList = dataList.filter(d => d.status === val);
+      }
+      else if (activePageType === 'Pemantauan') {
+        const filterEl = document.getElementById("pantauFilterBar");
+        if (filterEl) filterEl.style.display = "flex";
+
+        const val = document.getElementById("filterStatusPantau").value;
+        if (val !== "ALL") dataList = dataList.filter(d => d.status === val);
+      }
+      else if (activePageType === 'Pengawasan Lainnya') {
+        const filterEl = document.getElementById("lainnyaFilterBar");
+        if (filterEl) filterEl.style.display = "flex";
+
+        const val = document.getElementById("filterStatusLainnya").value;
+        if (val !== "ALL") dataList = dataList.filter(d => d.status === val);
+      }
+
+      // Jika data kosong
+      if (dataList.length === 0) {
+        thead.innerHTML = `<tr><th>Data Kosong</th></tr>`;
+        tbody.innerHTML = `<tr><td colspan="12" style="text-align:center;padding:20px;">Belum ada data ${activePageType} untuk tahun ${currentYear}.</td></tr>`;
+        return;
+      }
+
+      // === RENDER AUDIT ===
+      if (activePageType === 'Audit') {
+        thead.innerHTML = `<tr><th>No</th><th>Tanggal</th><th>No. ST</th><th>Objek</th><th>Kegiatan</th><th>Kode</th><th>Kelompok</th><th>Nilai Temuan</th><th>Nilai TL</th><th>Persentase TL</th><th>Status</th><th>Aksi</th></tr>`;
+        let html = dataList.map((item, i) => `<tr>
+      <td>${i + 1}</td><td>${item.tanggal || '-'}</td><td>${item.noST || '-'}</td><td>${item.objek}</td>
+      <td style="font-weight:600;">${item.nama}</td><td><b>${item.kodeTemuan || '-'}</b></td><td>${item.kelompokTemuan || '-'}</td>
+      <td>Rp ${Number(item.nilaiTemuan || 0).toLocaleString('id-ID')}</td>
+      <td>Rp ${Number(item.nilaiTL || 0).toLocaleString('id-ID')}</td>
+      <td><b>${item.persentase || '0%'}</b></td><td>${getStatusBadge(item.status)}</td><td>${actionButtons(item.id)}</td>
+    </tr>`).join("");
+
+        const totalTemuan = dataList.reduce((sum, item) => sum + Number(item.nilaiTemuan || 0), 0);
+        const totalTL = dataList.reduce((sum, item) => sum + Number(item.nilaiTL || 0), 0);
+        const persentaseTotal = totalTemuan > 0 ? ((totalTL / totalTemuan) * 100).toFixed(2) + '%' : '0%';
+
+        html += `<tr style="background:#eef1f6; font-weight:800; color:var(--navy-900);">
+        <td colspan="7" style="text-align:right; padding-right:15px; border-radius: 0 0 0 6px;">TOTAL KESELURUHAN:</td>
+        <td>Rp ${totalTemuan.toLocaleString('id-ID')}</td><td>Rp ${totalTL.toLocaleString('id-ID')}</td><td>${persentaseTotal}</td><td colspan="2" style="border-radius: 0 0 6px 0;"></td>
+      </tr>`;
+        tbody.innerHTML = html;
+      }
+
+      // === RENDER REVIU ===
+      else if (activePageType === 'Reviu') {
+        thead.innerHTML = `<tr><th>No</th><th>Tanggal</th><th>No. ST</th><th>Uraian Reviu</th><th>Jml OPD</th><th>Lama</th><th>Total Rek.</th><th>Sudah TL</th><th>Belum TL</th><th>Persentase</th><th>Status TL</th><th>Aksi</th></tr>`;
+
+        let html = dataList.map((item, i) => `<tr>
+      <td>${i + 1}</td>
+      <td>${item.tanggal || '-'}</td>
+      <td>${item.noST || '-'}</td>
+      <td style="font-weight:600;">${item.uraian || '-'}</td>
+      <td>${item.jmlOPD || '0'}</td>
+      <td>${item.lama || '0'} Hari</td>
+      <td>${item.totalRek || '0'}</td>
+      <td>${item.sudahTL || '0'}</td>
+      <td>${item.belumTL || '0'}</td>
+      <td><b>${item.persentase || '0%'}</b></td>
+      <td>${getStatusBadge(item.status)}</td>
+      <td>${actionButtons(item.id)}</td>
+    </tr>`).join("");
+
+        // TOTAL UNTUK REVIU (Hanya Total Data dan Jumlah OPD)
+        const totalDataReviu = dataList.length;
+        const sumOPD = dataList.reduce((sum, item) => sum + Number(item.jmlOPD || 0), 0);
+
+        html += `<tr style="background:#eef1f6; font-weight:800; color:var(--navy-900);">
+        <td colspan="4" style="text-align:right; padding-right:15px; border-radius: 0 0 0 6px;">
+            TOTAL (${totalDataReviu} Data Reviu):
+        </td>
+        <td>${sumOPD}</td>
+        <td colspan="7" style="border-radius: 0 0 6px 0;"></td>
+      </tr>`;
+
+        tbody.innerHTML = html;
+      }
+
+      // === RENDER EVALUASI ===
+      else if (activePageType === 'Evaluasi') {
+        thead.innerHTML = `<tr><th>No</th><th>Tanggal</th><th>No. ST</th><th>Uraian Evaluasi</th><th>Jml OPD</th><th>Lama</th><th>Total Rek.</th><th>Sudah TL</th><th>Belum TL</th><th>Persentase</th><th>Status TL</th><th>Aksi</th></tr>`;
+
+        let html = dataList.map((item, i) => `<tr>
+      <td>${i + 1}</td>
+      <td>${item.tanggal || '-'}</td>
+      <td>${item.noST || '-'}</td>
+      <td style="font-weight:600;">${item.uraian || '-'}</td>
+      <td>${item.jmlOPD || '0'}</td>
+      <td>${item.lama || '0'} Hari</td>
+      <td>${item.totalRek || '0'}</td>
+      <td>${item.sudahTL || '0'}</td>
+      <td>${item.belumTL || '0'}</td>
+      <td><b>${item.persentase || '0%'}</b></td>
+      <td>${getStatusBadge(item.status)}</td>
+      <td>${actionButtons(item.id)}</td>
+    </tr>`).join("");
+
+        // TOTAL UNTUK EVALUASI (Hanya Total Data dan Jumlah OPD)
+        const totalDataEvaluasi = dataList.length;
+        const sumOPDEval = dataList.reduce((sum, item) => sum + Number(item.jmlOPD || 0), 0);
+
+        html += `<tr style="background:#eef1f6; font-weight:800; color:var(--navy-900);">
+        <td colspan="4" style="text-align:right; padding-right:15px; border-radius: 0 0 0 6px;">
+            TOTAL (${totalDataEvaluasi} Data Evaluasi):
+        </td>
+        <td>${sumOPDEval}</td>
+        <td colspan="7" style="border-radius: 0 0 6px 0;"></td>
+      </tr>`;
+
+        tbody.innerHTML = html;
+      }
+      // === RENDER PEMANTAUAN ===
+      else if (activePageType === 'Pemantauan') {
+        thead.innerHTML = `<tr><th>No</th><th>Tanggal</th><th>No. ST</th><th>Uraian</th><th>Jml OPD</th><th>Lama</th><th>Total Rek.</th><th>Sudah TL</th><th>Belum TL</th><th>Persentase</th><th>Status TL</th><th>Aksi</th></tr>`;
+        let html = dataList.map((item, i) => `<tr>
+      <td>${i + 1}</td><td>${item.tanggal || '-'}</td><td>${item.noST || '-'}</td>
+      <td style="font-weight:600;">${item.uraian || '-'}</td>
+      <td>${item.jmlOPD || '0'}</td><td>${item.lama || '0'} Hari</td>
+      <td>${item.totalRek || '0'}</td><td>${item.sudahTL || '0'}</td><td>${item.belumTL || '0'}</td>
+      <td><b>${item.persentase || '0%'}</b></td><td>${getStatusBadge(item.status)}</td><td>${actionButtons(item.id)}</td>
+    </tr>`).join("");
+
+        const totalDataPantau = dataList.length;
+        const sumOPDPantau = dataList.reduce((sum, item) => sum + Number(item.jmlOPD || 0), 0);
+
+        html += `<tr style="background:#eef1f6; font-weight:800; color:var(--navy-900);">
+        <td colspan="4" style="text-align:right; padding-right:15px; border-radius: 0 0 0 6px;">TOTAL (${totalDataPantau} Data Pemantauan):</td>
+        <td>${sumOPDPantau}</td><td colspan="7" style="border-radius: 0 0 6px 0;"></td>
+      </tr>`;
+        tbody.innerHTML = html;
+      }
+
+      // === RENDER PENGAWASAN LAINNYA ===
+      else {
+        thead.innerHTML = `<tr><th>No</th><th>Tanggal</th><th>No. ST</th><th>Uraian</th><th>Jml OPD</th><th>Lama</th><th>Total Rek.</th><th>Sudah TL</th><th>Belum TL</th><th>Persentase</th><th>Status TL</th><th>Aksi</th></tr>`;
+        let html = dataList.map((item, i) => `<tr>
+      <td>${i + 1}</td><td>${item.tanggal || '-'}</td><td>${item.noST || '-'}</td>
+      <td style="font-weight:600;">${item.uraian || '-'}</td>
+      <td>${item.jmlOPD || '0'}</td><td>${item.lama || '0'} Hari</td>
+      <td>${item.totalRek || '0'}</td><td>${item.sudahTL || '0'}</td><td>${item.belumTL || '0'}</td>
+      <td><b>${item.persentase || '0%'}</b></td><td>${getStatusBadge(item.status)}</td><td>${actionButtons(item.id)}</td>
+    </tr>`).join("");
+
+        const totalDataLainnya = dataList.length;
+        const sumOPDLainnya = dataList.reduce((sum, item) => sum + Number(item.jmlOPD || 0), 0);
+
+        html += `<tr style="background:#eef1f6; font-weight:800; color:var(--navy-900);">
+        <td colspan="4" style="text-align:right; padding-right:15px; border-radius: 0 0 0 6px;">TOTAL (${totalDataLainnya} Data Pengawasan Lainnya):</td>
+        <td>${sumOPDLainnya}</td><td colspan="7" style="border-radius: 0 0 6px 0;"></td>
+      </tr>`;
+        tbody.innerHTML = html;
+      }
+    }
+
+    // === FUNGSI BUKA / TUTUP MODAL ===
+    function closeAllModals() {
+      document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active'));
+    }
+
+    function openModal() {
+      if (activePageType === 'Audit') {
+        document.getElementById("audit_id").value = "";
+        document.querySelectorAll('#modalAudit input').forEach(el => el.value = '');
+        document.getElementById("audit_nama").value = "AUDIT";
+        document.getElementById("audit_nilaiTemuan").value = "0";
+        document.getElementById("audit_nilaiTL").value = "0";
+        document.getElementById("audit_persentase").value = "0%";
+        document.getElementById("modalAudit").classList.add("active");
+      }
+      else if (activePageType === 'Reviu') {
+        document.getElementById("reviu_id").value = "";
+        document.querySelectorAll('#modalReviu input').forEach(el => el.value = '');
+        document.getElementById("reviu_totalRek").value = "0";
+        document.getElementById("reviu_sudahTL").value = "0";
+        document.getElementById("reviu_belumTL").value = "0";
+        document.getElementById("reviu_persentase").value = "0%";
+        document.getElementById("reviu_status").value = "Dalam Proses";
+        document.getElementById("modalReviu").classList.add("active");
+      }
+      else if (activePageType === 'Evaluasi') {
+        document.getElementById("eval_id").value = "";
+        document.querySelectorAll('#modalEvaluasi input').forEach(el => el.value = '');
+        document.getElementById("eval_totalRek").value = "0";
+        document.getElementById("eval_sudahTL").value = "0";
+        document.getElementById("eval_belumTL").value = "0";
+        document.getElementById("eval_persentase").value = "0%";
+        document.getElementById("eval_status").value = "Dalam Proses";
+        document.getElementById("modalEvaluasi").classList.add("active");
+      }
+      else if (activePageType === 'Pemantauan') {
+        document.getElementById("pantau_id").value = "";
+        document.querySelectorAll('#modalPemantauan input').forEach(el => el.value = '');
+        document.getElementById("pantau_totalRek").value = "0";
+        document.getElementById("pantau_sudahTL").value = "0";
+        document.getElementById("pantau_belumTL").value = "0";
+        document.getElementById("pantau_persentase").value = "0%";
+        document.getElementById("pantau_status").value = "Dalam Proses";
+        document.getElementById("modalPemantauan").classList.add("active");
+      }
+      else {
+        document.getElementById("lain_id").value = "";
+        document.querySelectorAll('#modalLainnya input').forEach(el => el.value = '');
+        document.getElementById("lain_totalRek").value = "0";
+        document.getElementById("lain_sudahTL").value = "0";
+        document.getElementById("lain_belumTL").value = "0";
+        document.getElementById("lain_persentase").value = "0%";
+        document.getElementById("lain_status").value = "Dalam Proses";
+        document.getElementById("modalLainnya").classList.add("active");
+      }
+    }
+
+    // === FUNGSI SIMPAN DATA KE STATE (DIPISAH PER HALAMAN) ===
+    function pushDataToState(newData, id) {
+      let dataList = state.crudData[currentYear][activePageType];
+      if (id) {
+        const idx = dataList.findIndex(d => d.id == id);
+        if (idx > -1) { newData.id = Number(id); dataList[idx] = newData; }
+      } else {
+        newData.id = new Date().getTime(); dataList.push(newData);
+      }
+      // Update KPI Dashboard
+      const kpiIdx = state.years[currentYear].kegiatan.findIndex(k => k.label === activePageType);
+      if (kpiIdx > -1) { state.years[currentYear].kegiatan[kpiIdx].value = dataList.length; }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      closeAllModals(); renderCrudPage();
+    }
+
+    function saveAudit() {
+      const nama = document.getElementById("audit_nama").value;
+      const objek = document.getElementById("audit_objek").value;
+      if (!nama || !objek) return alert("Nama dan Objek wajib diisi!");
+      pushDataToState({
+        nama, objek,
+        status: document.getElementById("audit_status").value,
+        tanggal: document.getElementById("audit_tanggal").value,
+        noST: document.getElementById("audit_noST").value,
+        uraian: document.getElementById("audit_uraian").value,
+        lama: document.getElementById("audit_lama").value,
+        kodeTemuan: document.getElementById("audit_kodeTemuan").value,
+        kelompokTemuan: document.getElementById("audit_kelompokTemuan").value,
+        keterangan: document.getElementById("audit_keterangan").value,
+        nilaiTemuan: document.getElementById("audit_nilaiTemuan").value,
+        nilaiTL: document.getElementById("audit_nilaiTL").value,
+        persentase: document.getElementById("audit_persentase").value,
+        rekomendasi: document.getElementById("audit_rekomendasi").value
+      }, document.getElementById("audit_id").value);
+    }
+
+    function saveReviu() {
+      const uraian = document.getElementById("reviu_uraian").value;
+      if (!uraian) return alert("Uraian Reviu wajib diisi!");
+
+      pushDataToState({
+        nama: "Reviu", // Identifier dasar
+        uraian: uraian,
+        tanggal: document.getElementById("reviu_tanggal").value,
+        noST: document.getElementById("reviu_noST").value,
+        jmlOPD: document.getElementById("reviu_jmlOPD").value,
+        lama: document.getElementById("reviu_lama").value,
+        totalRek: document.getElementById("reviu_totalRek").value,
+        sudahTL: document.getElementById("reviu_sudahTL").value,
+        belumTL: document.getElementById("reviu_belumTL").value,
+        persentase: document.getElementById("reviu_persentase").value,
+        status: document.getElementById("reviu_status").value
+      }, document.getElementById("reviu_id").value);
+    }
+
+    function saveEvaluasi() {
+      const uraian = document.getElementById("eval_uraian").value;
+      if (!uraian) return alert("Uraian Evaluasi wajib diisi!");
+
+      pushDataToState({
+        nama: "Evaluasi",
+        uraian: uraian,
+        tanggal: document.getElementById("eval_tanggal").value,
+        noST: document.getElementById("eval_noST").value,
+        jmlOPD: document.getElementById("eval_jmlOPD").value,
+        lama: document.getElementById("eval_lama").value,
+        totalRek: document.getElementById("eval_totalRek").value,
+        sudahTL: document.getElementById("eval_sudahTL").value,
+        belumTL: document.getElementById("eval_belumTL").value,
+        persentase: document.getElementById("eval_persentase").value,
+        status: document.getElementById("eval_status").value
+      }, document.getElementById("eval_id").value);
+    }
+    function savePemantauan() {
+      const uraian = document.getElementById("pantau_uraian").value;
+      if (!uraian) return alert("Uraian wajib diisi!");
+
+      pushDataToState({
+        nama: "Pemantauan",
+        uraian: uraian,
+        tanggal: document.getElementById("pantau_tanggal").value,
+        noST: document.getElementById("pantau_noST").value,
+        jmlOPD: document.getElementById("pantau_jmlOPD").value,
+        lama: document.getElementById("pantau_lama").value,
+        totalRek: document.getElementById("pantau_totalRek").value,
+        sudahTL: document.getElementById("pantau_sudahTL").value,
+        belumTL: document.getElementById("pantau_belumTL").value,
+        persentase: document.getElementById("pantau_persentase").value,
+        status: document.getElementById("pantau_status").value
+      }, document.getElementById("pantau_id").value);
+    }
+
+    function saveLainnya() {
+      const uraian = document.getElementById("lain_uraian").value;
+      if (!uraian) return alert("Uraian wajib diisi!");
+
+      pushDataToState({
+        nama: "Pengawasan Lainnya",
+        uraian: uraian,
+        tanggal: document.getElementById("lain_tanggal").value,
+        noST: document.getElementById("lain_noST").value,
+        jmlOPD: document.getElementById("lain_jmlOPD").value,
+        lama: document.getElementById("lain_lama").value,
+        totalRek: document.getElementById("lain_totalRek").value,
+        sudahTL: document.getElementById("lain_sudahTL").value,
+        belumTL: document.getElementById("lain_belumTL").value,
+        persentase: document.getElementById("lain_persentase").value,
+        status: document.getElementById("lain_status").value
+      }, document.getElementById("lain_id").value);
+    }
+
+    // === FUNGSI EDIT DATA ===
+    function editCrudData(id) {
+      const item = state.crudData[currentYear][activePageType].find(d => d.id == id);
+      if (!item) return;
+
+      if (activePageType === 'Audit') {
+        document.getElementById("modalAudit").classList.add("active");
+        document.getElementById("audit_id").value = item.id;
+        document.getElementById("audit_nama").value = item.nama;
+        document.getElementById("audit_objek").value = item.objek;
+        document.getElementById("audit_tanggal").value = item.tanggal || "";
+        document.getElementById("audit_noST").value = item.noST || "";
+        document.getElementById("audit_uraian").value = item.uraian || "";
+        document.getElementById("audit_lama").value = item.lama || "";
+        document.getElementById("audit_kodeTemuan").value = item.kodeTemuan || "";
+        document.getElementById("audit_kelompokTemuan").value = item.kelompokTemuan || "";
+        document.getElementById("audit_keterangan").value = item.keterangan || "";
+        document.getElementById("audit_nilaiTemuan").value = item.nilaiTemuan || 0;
+        document.getElementById("audit_nilaiTL").value = item.nilaiTL || 0;
+        document.getElementById("audit_persentase").value = item.persentase || "0%";
+        document.getElementById("audit_rekomendasi").value = item.rekomendasi || "";
+        document.getElementById("audit_status").value = item.status;
+      }
+      else if (activePageType === 'Reviu') {
+        document.getElementById("modalReviu").classList.add("active");
+        document.getElementById("reviu_id").value = item.id;
+        document.getElementById("reviu_nama").value = item.nama;
+        document.getElementById("reviu_objek").value = item.objek;
+        document.getElementById("reviu_tanggal").value = item.tanggal || "";
+        document.getElementById("reviu_ruanglingkup").value = item.ruangLingkup || "";
+        document.getElementById("reviu_status").value = item.status;
+      }
+      else if (activePageType === 'Evaluasi') {
+        document.getElementById("modalEvaluasi").classList.add("active");
+        document.getElementById("eval_id").value = item.id;
+        document.getElementById("eval_tanggal").value = item.tanggal || "";
+        document.getElementById("eval_noST").value = item.noST || "";
+        document.getElementById("eval_uraian").value = item.uraian || "";
+        document.getElementById("eval_jmlOPD").value = item.jmlOPD || "";
+        document.getElementById("eval_lama").value = item.lama || "";
+        document.getElementById("eval_totalRek").value = item.totalRek || 0;
+        document.getElementById("eval_sudahTL").value = item.sudahTL || 0;
+        document.getElementById("eval_belumTL").value = item.belumTL || 0;
+        document.getElementById("eval_persentase").value = item.persentase || "0%";
+        document.getElementById("eval_status").value = item.status;
+      }
+      else if (activePageType === 'Pemantauan') {
+        document.getElementById("modalPemantauan").classList.add("active");
+        document.getElementById("pantau_id").value = item.id;
+        document.getElementById("pantau_tanggal").value = item.tanggal || "";
+        document.getElementById("pantau_noST").value = item.noST || "";
+        document.getElementById("pantau_uraian").value = item.uraian || "";
+        document.getElementById("pantau_jmlOPD").value = item.jmlOPD || "";
+        document.getElementById("pantau_lama").value = item.lama || "";
+        document.getElementById("pantau_totalRek").value = item.totalRek || 0;
+        document.getElementById("pantau_sudahTL").value = item.sudahTL || 0;
+        document.getElementById("pantau_belumTL").value = item.belumTL || 0;
+        document.getElementById("pantau_persentase").value = item.persentase || "0%";
+        document.getElementById("pantau_status").value = item.status;
+      }
+      else {
+        document.getElementById("modalLainnya").classList.add("active");
+        document.getElementById("lain_id").value = item.id;
+        document.getElementById("lain_tanggal").value = item.tanggal || "";
+        document.getElementById("lain_noST").value = item.noST || "";
+        document.getElementById("lain_uraian").value = item.uraian || "";
+        document.getElementById("lain_jmlOPD").value = item.jmlOPD || "";
+        document.getElementById("lain_lama").value = item.lama || "";
+        document.getElementById("lain_totalRek").value = item.totalRek || 0;
+        document.getElementById("lain_sudahTL").value = item.sudahTL || 0;
+        document.getElementById("lain_belumTL").value = item.belumTL || 0;
+        document.getElementById("lain_persentase").value = item.persentase || "0%";
+        document.getElementById("lain_status").value = item.status;
+      }
+    }
+
+    // === FUNGSI HAPUS ===
+    function deleteCrudData(id) {
+      if (!confirm("Yakin ingin menghapus data ini?")) return;
+      let dataList = state.crudData[currentYear][activePageType];
+      state.crudData[currentYear][activePageType] = dataList.filter(d => d.id != id);
+
+      const kpiIdx = state.years[currentYear].kegiatan.findIndex(k => k.label === activePageType);
+      if (kpiIdx > -1) { state.years[currentYear].kegiatan[kpiIdx].value = state.crudData[currentYear][activePageType].length; }
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      renderCrudPage();
+    }
+
+    function renderIlhpPage() {
+      document.getElementById("ilhpTableBody").innerHTML = state.ilhp.map(item => `
     <tr>
       <td style="font-weight:700;color:var(--text-dark)">Tahun ${item.tahun}</td>
       <td>${item.jumlah} Dokumen Laporan</td>
       <td><span style="padding:4px 10px;border-radius:12px;font-size:11px;font-weight:700;
-          background:${item.status==='Tersusun'?'#d5f2e2':'#fdecc4'};
-          color:${item.status==='Tersusun'?'#1f8a52':'#b0791a'}">${item.status}</span></td>
+          background:${item.status === 'Tersusun' ? '#d5f2e2' : '#fdecc4'};
+          color:${item.status === 'Tersusun' ? '#1f8a52' : '#b0791a'}">${item.status}</span></td>
     </tr>
   `).join("");
-}
+    }
 
-// Fungsi untuk menampilkan tanggal hari ini (Format Bahasa Indonesia)
-function setTanggalHariIni() {
-  const hariIni = new Date();
-  const opsi = { day: 'numeric', month: 'long', year: 'numeric' };
-  const tanggalFormatted = hariIni.toLocaleDateString('id-ID', opsi);
+    // Fungsi untuk menampilkan tanggal hari ini (Format Bahasa Indonesia)
+    function setTanggalHariIni() {
+      const hariIni = new Date();
+      const opsi = { day: 'numeric', month: 'long', year: 'numeric' };
+      const tanggalFormatted = hariIni.toLocaleDateString('id-ID', opsi);
 
-  const elTgl = document.getElementById('tglUpdate');
-  if (elTgl) {
-    elTgl.innerText = tanggalFormatted;
-  }
-}
+      const elTgl = document.getElementById('tglUpdate');
+      if (elTgl) {
+        elTgl.innerText = tanggalFormatted;
+      }
+    }
 
-// Panggil fungsi tanggal bersamaan saat inisialisasi awal
-setTanggalHariIni();
-renderDashboard();
-</script>
+    // Panggil fungsi tanggal bersamaan saat inisialisasi awal
+    setTanggalHariIni();
+    renderDashboard();
+  </script>
 </body>
+
 </html>
