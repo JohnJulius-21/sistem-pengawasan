@@ -358,26 +358,91 @@
 
 <!-- MODAL FORM CRUD -->
 <div class="modal-overlay" id="crudModal">
-  <div class="modal-box">
+  <div class="modal-box" id="crudModalBox">
     <h3 id="modalTitle">Tambah Data</h3>
     <input type="hidden" id="formId">
     
-    <div class="form-group">
-      <label>Nama Kegiatan</label>
-      <input type="text" id="formNama" placeholder="Contoh: Audit Dana Desa...">
+    <div class="grid-form" id="modalGridForm">
+      <!-- Field Umum -->
+      <div class="form-group">
+        <label>Nama Kegiatan</label>
+        <input type="text" id="formNama" placeholder="Contoh: Audit Dana Desa...">
+      </div>
+      <div class="form-group">
+        <label>Objek Pemeriksaan (OPD / Desa)</label>
+        <input type="text" id="formObjek" placeholder="Contoh: Dinas Pendidikan">
+      </div>
+      
+      <!-- Field Khusus Audit -->
+      <div class="form-group audit-field">
+        <label>Tanggal</label>
+        <input type="date" id="formTanggal">
+      </div>
+      <div class="form-group audit-field">
+        <label>Nomor Surat Tugas</label>
+        <input type="text" id="formNoST" placeholder="Nomor ST...">
+      </div>
+      <div class="form-group full-width audit-field">
+        <label>Uraian Penugasan</label>
+        <input type="text" id="formUraian" placeholder="Uraian singkat...">
+      </div>
+      <div class="form-group audit-field">
+        <label>Lama Pelaksanaan (Hari)</label>
+        <input type="number" id="formLama" placeholder="Misal: 14">
+      </div>
+      <div class="form-group audit-field">
+        <label>Kode Kelompok Temuan</label>
+        <select id="formKodeTemuan" onchange="autoFillKelompokTemuan()">
+          <option value="">-- Pilih Kode --</option>
+          <option value="KTTP-1">KTTP-1</option>
+          <option value="KTTP-2">KTTP-2</option>
+          <option value="KTTP-3">KTTP-3</option>
+          <option value="KTTP-4">KTTP-4</option>
+          <option value="KTTP-5">KTTP-5</option>
+          <option value="KSPI-1">KSPI-1</option>
+          <option value="KSPI-2">KSPI-2</option>
+          <option value="KSPI-3">KSPI-3</option>
+          <option value="3E-1">3E-1</option>
+          <option value="3E-2">3E-2</option>
+          <option value="3E-3">3E-3</option>
+        </select>
+      </div>
+      <div class="form-group audit-field full-width">
+        <label>Kelompok Temuan</label>
+        <input type="text" id="formKelompokTemuan" readonly style="background:#eef1f6;">
+      </div>
+      <div class="form-group audit-field full-width">
+        <label>Keterangan</label>
+        <input type="text" id="formKeterangan" placeholder="Keterangan temuan...">
+      </div>
+      <div class="form-group audit-field">
+        <label>Nilai Temuan (Rp)</label>
+        <input type="number" id="formNilaiTemuan" onkeyup="hitungPersentase()" value="0">
+      </div>
+      <div class="form-group audit-field">
+        <label>Nilai Tindak Lanjut (Rp)</label>
+        <input type="number" id="formNilaiTL" onkeyup="hitungPersentase()" value="0">
+      </div>
+      <div class="form-group audit-field">
+        <label>Persentase TL (%)</label>
+        <input type="text" id="formPersentase" readonly style="background:#eef1f6;" value="0%">
+      </div>
+      <div class="form-group audit-field full-width">
+        <label>Rekomendasi</label>
+        <input type="text" id="formRekomendasi" placeholder="Rekomendasi tindak lanjut...">
+      </div>
+
+      <!-- Field Status (Digunakan Umum & Audit) -->
+      <div class="form-group">
+        <label>Status (Tindak Lanjut)</label>
+        <select id="formStatus">
+          <option value="Selesai">Selesai</option>
+          <option value="Dalam Proses">Dalam Proses</option>
+          <option value="Belum Mulai">Belum Mulai</option>
+        </select>
+      </div>
     </div>
-    <div class="form-group">
-      <label>Objek (OPD / Desa)</label>
-      <input type="text" id="formObjek" placeholder="Contoh: Dinas Pendidikan">
-    </div>
-    <div class="form-group">
-      <label>Status</label>
-      <select id="formStatus">
-        <option value="Selesai">Selesai</option>
-        <option value="Dalam Proses">Dalam Proses</option>
-        <option value="Belum Mulai">Belum Mulai</option>
-      </select>
-    </div>
+    
     <div class="modal-actions">
       <button class="reset-btn" onclick="closeModal()">Batal</button>
       <button class="apply-btn" onclick="saveCrudData()">Simpan Data</button>
@@ -503,134 +568,135 @@ function changeYear(year) {
   }
 }
 
-// === RENDER DASHBOARD ===
-function renderDashboard() {
-  const yData = state.years[currentYear];
+// --- Letakkan ini di atas bersama deklarasi variabel ---
+const kodeTemuanMap = {
+  "KTTP-1": "Kerugian Negara/Daerah",
+  "KTTP-2": "Potensi Kerugian Negara/Daerah",
+  "KTTP-3": "Kekurangan Penerimaan Negara/Daerah",
+  "KTTP-4": "Administrasi",
+  "KTTP-5": "Indikasi Tindak Pidana",
+  "KSPI-1": "Pengendalian Akuntansi dan Pelaporan",
+  "KSPI-2": "Pelaksanaan Anggaran",
+  "KSPI-3": "Struktur Pengendalian Intern",
+  "3E-1": "Ketidakhematan/Pemborosan/Ketidakekonomisan",
+  "3E-2": "Ketidakefesienan",
+  "3E-3": "Ketidakefektidan"
+};
 
-  const currentIlhp = state.ilhp.find(i => i.tahun == currentYear);
-  const jumlahIlhp = currentIlhp ? currentIlhp.jumlah : 0;
-  
-  // 1. Render KPI (Kegiatan + ILHP)
-  let kpiHtml = yData.kegiatan.map(k => `
-    <div class="kpi-card ${kpiBg[k.label]}">
-      <div class="kpi-top">
-        <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">${kpiIcon[k.label]}</svg></div>
-        <div class="kpi-label">${k.label}</div>
-      </div>
-      <div class="kpi-numbers"><div class="num">${k.value}</div><div style="font-size:11px;opacity:0.9">Kegiatan</div></div>
-    </div>
-  `).join("");
+// Fungsi auto-fill Kelompok Temuan
+function autoFillKelompokTemuan() {
+  const kode = document.getElementById("formKodeTemuan").value;
+  document.getElementById("formKelompokTemuan").value = kodeTemuanMap[kode] || "";
+}
 
-  // Tambahkan Kartu KPI Khusus ILHP di akhir grid
-  kpiHtml += `
-    <div class="kpi-card ${kpiBg['ILHP']}">
-      <div class="kpi-top">
-        <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">${kpiIcon['ILHP']}</svg></div>
-        <div class="kpi-label">ILHP</div>
-      </div>
-      <div class="kpi-numbers"><div class="num">${jumlahIlhp}</div><div style="font-size:11px;opacity:0.9">Dokumen</div></div>
-    </div>
-  `;
-
-  document.getElementById("kpiRow").innerHTML = kpiHtml;
-
-  // Cegah render chart jika Chart.js gagal diload karena tidak ada internet
-  if (typeof Chart === 'undefined') return;
-
-  // 2. Bar Chart
-  const barCtx = document.getElementById("barRekap");
-  if(charts.bar){ 
-    charts.bar.data.datasets[0].data = yData.kegiatan.map(k=>k.value); charts.bar.update(); 
-  } else {
-    charts.bar = new Chart(barCtx, {
-      type:'bar',
-      data:{ labels:yData.kegiatan.map(k=>k.label), datasets:[{ data:yData.kegiatan.map(k=>k.value), backgroundColor:Object.values(colorMap), borderRadius:4 }] },
-      options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false} }, scales:{ x:{grid:{display:false}} } }
-    });
+// Fungsi hitung persentase TL otomatis
+function hitungPersentase() {
+  const nilaiTemuan = parseFloat(document.getElementById("formNilaiTemuan").value) || 0;
+  const nilaiTL = parseFloat(document.getElementById("formNilaiTL").value) || 0;
+  let persentase = 0;
+  if(nilaiTemuan > 0) {
+    persentase = (nilaiTL / nilaiTemuan) * 100;
   }
-
-  // 3. Donut Persentase
-  const totalKeg = yData.kegiatan.reduce((s,k)=>s+Number(k.value),0);
-  document.getElementById("totalPersen").innerText = totalKeg;
-  if(charts.donutPersen){
-    charts.donutPersen.data.datasets[0].data = yData.kegiatan.map(k=>k.value); charts.donutPersen.update();
-  } else {
-    charts.donutPersen = new Chart(document.getElementById("donutPersen"), {
-      type:'doughnut',
-      data:{ labels:yData.kegiatan.map(k=>k.label), datasets:[{ data:yData.kegiatan.map(k=>k.value), backgroundColor:Object.values(colorMap), borderWidth:2 }] },
-      options:{ responsive:true, maintainAspectRatio:false, cutout:'65%', plugins:{ legend:{display:false} } }
-    });
-  }
-  document.getElementById("legendPersen").innerHTML = yData.kegiatan.map((k,i)=>`
-    <div class="legend-item"><span class="legend-dot" style="background:${Object.values(colorMap)[i]}"></span>
-    <span style="flex:1;color:var(--text-mid)">${k.label}</span><strong>${k.value}</strong></div>
-  `).join("");
-
-  // 4. Tren Chart (Lintas Tahun)
-  if(!charts.tren) {
-    const t = state.tren;
-    const datasets = t.series.map((s,i)=>({ type:'bar', label:s.label, data:s.data, backgroundColor:Object.values(colorMap)[i] }));
-    charts.tren = new Chart(document.getElementById("trenChart"), {
-      data:{ labels:t.years, datasets },
-      options:{ responsive:true, maintainAspectRatio:false, scales:{ x:{grid:{display:false}} } }
-    });
-  }
-
-  // 5. Donut Tindak Lanjut
-  const totalTindak = yData.tindak.reduce((s,t)=>s+t.value,0);
-  const pct = totalTindak > 0 ? Math.round((yData.tindak[0].value/totalTindak)*100) : 0;
-  document.getElementById("pctSelesai").innerText = pct + "%";
-  if(charts.donutTindak){
-    charts.donutTindak.data.datasets[0].data = yData.tindak.map(t=>t.value); charts.donutTindak.update();
-  } else {
-    charts.donutTindak = new Chart(document.getElementById("donutTindak"), {
-      type:'doughnut',
-      data:{ labels:yData.tindak.map(t=>t.label), datasets:[{ data:yData.tindak.map(t=>t.value), backgroundColor:yData.tindak.map(t=>t.color) }] },
-      options:{ responsive:true, maintainAspectRatio:false, cutout:'65%', plugins:{ legend:{display:false} } }
-    });
-  }
-  document.getElementById("legendTindak").innerHTML = yData.tindak.map(t=>`
-    <div class="legend-item"><span class="legend-dot" style="background:${t.color}"></span>
-    <span style="flex:1;color:var(--text-mid)">${t.label}</span><strong>${t.value}</strong></div>
-  `).join("");
-
-  // 6. Bar Sebaran
-  if(charts.sebaran){
-    charts.sebaran.data.datasets[0].data = yData.sebaran.map(s=>s.value); charts.sebaran.update();
-  } else {
-    charts.sebaran = new Chart(document.getElementById("sebaranChart"), {
-      type:'bar',
-      data:{ labels:yData.sebaran.map(s=>s.label), datasets:[{ data:yData.sebaran.map(s=>s.value), backgroundColor:Object.values(colorMap), borderRadius:4 }] },
-      options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false} } }
-    });
-  }
+  document.getElementById("formPersentase").value = persentase.toFixed(2) + "%";
 }
 
 // === SISTEM CRUD ===
 function renderCrudPage() {
   document.getElementById("crudTitle").innerText = `Daftar Kegiatan ${activePageType} - Tahun ${currentYear}`;
-  const dataList = state.crudData[currentYear][activePageType] || [];
   
+  let dataList = state.crudData[currentYear][activePageType] || [];
   const tbody = document.getElementById("crudTableBody");
-  if(dataList.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:20px;">Belum ada data ${activePageType} untuk tahun ${currentYear}.</td></tr>`;
-    return;
-  }
+  const thead = document.getElementById("crudTableHeader");
+  const filterBar = document.getElementById("auditFilterBar");
 
-  tbody.innerHTML = dataList.map((item, index) => `
-    <tr>
-      <td>${index + 1}</td>
-      <td style="font-weight:600;color:var(--text-dark)">${item.nama}</td>
-      <td>${item.objek}</td>
-      <td><span style="padding:4px 10px;border-radius:12px;font-size:11px;font-weight:700;
-          background:${item.status==='Selesai'?'#d5f2e2':(item.status==='Dalam Proses'?'#fdecc4':'#fcdbdb')};
-          color:${item.status==='Selesai'?'#1f8a52':(item.status==='Dalam Proses'?'#b0791a':'#c0392b')}">${item.status}</span></td>
-      <td>
-        <button onclick="editCrudData(${item.id})" class="apply-btn" style="padding:5px 10px;font-size:11px;">Edit</button>
-        <button onclick="deleteCrudData(${item.id})" class="reset-btn" style="padding:5px 10px;font-size:11px;margin-left:4px;">Hapus</button>
-      </td>
-    </tr>
-  `).join("");
+  // Jika halaman adalah Audit
+  if(activePageType === 'Audit') {
+    filterBar.classList.add("active");
+    
+    // Terapkan Filter Kode Temuan
+    const filterVal = document.getElementById("filterKodeTemuan").value;
+    if(filterVal !== "ALL") {
+      dataList = dataList.filter(d => d.kodeTemuan === filterVal);
+    }
+
+    // Render Header Panjang untuk Audit
+    thead.innerHTML = `
+      <tr>
+        <th>No</th>
+        <th>Tanggal</th>
+        <th>No. ST</th>
+        <th>Objek</th>
+        <th>Kegiatan</th>
+        <th>Kode</th>
+        <th>Kelompok Temuan</th>
+        <th>Nilai Temuan</th>
+        <th>Nilai TL</th>
+        <th>Persentase</th>
+        <th>Status TL</th>
+        <th>Aksi</th>
+      </tr>
+    `;
+    
+    if(dataList.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="12" style="text-align:center;padding:20px;">Belum ada data Audit.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = dataList.map((item, index) => `
+      <tr>
+        <td>${index + 1}</td>
+        <td>${item.tanggal || '-'}</td>
+        <td>${item.noST || '-'}</td>
+        <td>${item.objek}</td>
+        <td style="font-weight:600;color:var(--text-dark)">${item.nama}</td>
+        <td><span style="font-weight:700;color:var(--navy-900);">${item.kodeTemuan || '-'}</span></td>
+        <td>${item.kelompokTemuan || '-'}</td>
+        <td>Rp ${Number(item.nilaiTemuan || 0).toLocaleString('id-ID')}</td>
+        <td>Rp ${Number(item.nilaiTL || 0).toLocaleString('id-ID')}</td>
+        <td style="font-weight:700;">${item.persentase || '0%'}</td>
+        <td><span style="padding:4px 10px;border-radius:12px;font-size:11px;font-weight:700;
+            background:${item.status==='Selesai'?'#d5f2e2':(item.status==='Dalam Proses'?'#fdecc4':'#fcdbdb')};
+            color:${item.status==='Selesai'?'#1f8a52':(item.status==='Dalam Proses'?'#b0791a':'#c0392b')}">${item.status}</span></td>
+        <td>
+          <button onclick="editCrudData(${item.id})" class="apply-btn" style="padding:5px 10px;font-size:11px;">Edit</button>
+          <button onclick="deleteCrudData(${item.id})" class="reset-btn" style="padding:5px 10px;font-size:11px;margin-left:4px;">Hapus</button>
+        </td>
+      </tr>
+    `).join("");
+
+  } else {
+    // Halaman Non-Audit (Reviu, Evaluasi, dll)
+    filterBar.classList.remove("active");
+    thead.innerHTML = `
+      <tr>
+        <th style="width:50px">No</th>
+        <th>Nama Kegiatan</th>
+        <th>Objek (OPD/Desa)</th>
+        <th>Status</th>
+        <th style="width:150px">Aksi</th>
+      </tr>
+    `;
+
+    if(dataList.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:20px;">Belum ada data ${activePageType} untuk tahun ${currentYear}.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = dataList.map((item, index) => `
+      <tr>
+        <td>${index + 1}</td>
+        <td style="font-weight:600;color:var(--text-dark)">${item.nama}</td>
+        <td>${item.objek}</td>
+        <td><span style="padding:4px 10px;border-radius:12px;font-size:11px;font-weight:700;
+            background:${item.status==='Selesai'?'#d5f2e2':(item.status==='Dalam Proses'?'#fdecc4':'#fcdbdb')};
+            color:${item.status==='Selesai'?'#1f8a52':(item.status==='Dalam Proses'?'#b0791a':'#c0392b')}">${item.status}</span></td>
+        <td>
+          <button onclick="editCrudData(${item.id})" class="apply-btn" style="padding:5px 10px;font-size:11px;">Edit</button>
+          <button onclick="deleteCrudData(${item.id})" class="reset-btn" style="padding:5px 10px;font-size:11px;margin-left:4px;">Hapus</button>
+        </td>
+      </tr>
+    `).join("");
+  }
 }
 
 function openModal() {
@@ -638,11 +704,36 @@ function openModal() {
   document.getElementById("formNama").value = "";
   document.getElementById("formObjek").value = "";
   document.getElementById("formStatus").value = "Dalam Proses";
+  
+  const modalBox = document.getElementById("crudModalBox");
+  const modalGrid = document.getElementById("modalGridForm");
+
+  // Jika Audit, atur class CSS untuk menampilkan field tambahan dan mengubah ukuran modal
+  if(activePageType === 'Audit') {
+    modalBox.classList.add("wide");
+    modalGrid.classList.add("cols-2");
+    modalBox.classList.add("audit-mode");
+    
+    // Reset field tambahan audit
+    document.getElementById("formTanggal").value = "";
+    document.getElementById("formNoST").value = "";
+    document.getElementById("formUraian").value = "";
+    document.getElementById("formLama").value = "";
+    document.getElementById("formKodeTemuan").value = "";
+    document.getElementById("formKelompokTemuan").value = "";
+    document.getElementById("formKeterangan").value = "";
+    document.getElementById("formNilaiTemuan").value = "0";
+    document.getElementById("formNilaiTL").value = "0";
+    document.getElementById("formPersentase").value = "0%";
+    document.getElementById("formRekomendasi").value = "";
+  } else {
+    modalBox.classList.remove("wide", "audit-mode");
+    modalGrid.classList.remove("cols-2");
+  }
+
   document.getElementById("modalTitle").innerText = `Tambah ${activePageType} (${currentYear})`;
   document.getElementById("crudModal").classList.add("active");
 }
-
-function closeModal() { document.getElementById("crudModal").classList.remove("active"); }
 
 function saveCrudData() {
   const id = document.getElementById("formId").value;
@@ -652,14 +743,34 @@ function saveCrudData() {
 
   if(!nama || !objek) return alert("Nama kegiatan dan Objek harus diisi!");
 
+  let newData = { nama, objek, status };
+
+  // Tangkap data tambahan jika di mode Audit
+  if(activePageType === 'Audit') {
+    newData.tanggal = document.getElementById("formTanggal").value;
+    newData.noST = document.getElementById("formNoST").value;
+    newData.uraian = document.getElementById("formUraian").value;
+    newData.lama = document.getElementById("formLama").value;
+    newData.kodeTemuan = document.getElementById("formKodeTemuan").value;
+    newData.kelompokTemuan = document.getElementById("formKelompokTemuan").value;
+    newData.keterangan = document.getElementById("formKeterangan").value;
+    newData.nilaiTemuan = document.getElementById("formNilaiTemuan").value;
+    newData.nilaiTL = document.getElementById("formNilaiTL").value;
+    newData.persentase = document.getElementById("formPersentase").value;
+    newData.rekomendasi = document.getElementById("formRekomendasi").value;
+  }
+
   let dataList = state.crudData[currentYear][activePageType];
   
   if(id) {
     const idx = dataList.findIndex(d => d.id == id);
-    if(idx > -1) { dataList[idx] = { id:Number(id), nama, objek, status }; }
+    if(idx > -1) { 
+      newData.id = Number(id);
+      dataList[idx] = newData; 
+    }
   } else {
-    const newId = new Date().getTime();
-    dataList.push({ id:newId, nama, objek, status });
+    newData.id = new Date().getTime();
+    dataList.push(newData);
   }
 
   const kpiIdx = state.years[currentYear].kegiatan.findIndex(k => k.label === activePageType);
@@ -673,12 +784,29 @@ function saveCrudData() {
 function editCrudData(id) {
   const item = state.crudData[currentYear][activePageType].find(d => d.id == id);
   if(!item) return;
+  
+  openModal(); // Buka modal untuk set layout sesuai tipe
+
   document.getElementById("formId").value = item.id;
   document.getElementById("formNama").value = item.nama;
   document.getElementById("formObjek").value = item.objek;
   document.getElementById("formStatus").value = item.status;
   document.getElementById("modalTitle").innerText = `Edit ${activePageType} (${currentYear})`;
-  document.getElementById("crudModal").classList.add("active");
+
+  // Set nilai tambahan jika di mode Audit
+  if(activePageType === 'Audit') {
+    document.getElementById("formTanggal").value = item.tanggal || "";
+    document.getElementById("formNoST").value = item.noST || "";
+    document.getElementById("formUraian").value = item.uraian || "";
+    document.getElementById("formLama").value = item.lama || "";
+    document.getElementById("formKodeTemuan").value = item.kodeTemuan || "";
+    document.getElementById("formKelompokTemuan").value = item.kelompokTemuan || "";
+    document.getElementById("formKeterangan").value = item.keterangan || "";
+    document.getElementById("formNilaiTemuan").value = item.nilaiTemuan || 0;
+    document.getElementById("formNilaiTL").value = item.nilaiTL || 0;
+    document.getElementById("formPersentase").value = item.persentase || "0%";
+    document.getElementById("formRekomendasi").value = item.rekomendasi || "";
+  }
 }
 
 function deleteCrudData(id) {
