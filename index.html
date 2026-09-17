@@ -356,22 +356,59 @@
     }
 
     /* STYLE UNTUK TOMBOL IKON AKSI */
-  .action-group { display: flex; gap: 6px; justify-content: center; }
-  .icon-btn { 
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 28px; height: 28px; border-radius: 6px; border: none; cursor: pointer;
-    transition: all 0.2s ease; background: transparent;
-  }
-  .icon-btn svg { width: 14px; height: 14px; }
-  
-  .btn-view { color: var(--blue-accent); background: rgba(47, 111, 237, 0.1); }
-  .btn-view:hover { background: var(--blue-accent); color: #fff; }
-  
-  .btn-edit { color: var(--orange); background: rgba(240, 134, 44, 0.1); }
-  .btn-edit:hover { background: var(--orange); color: #fff; }
-  
-  .btn-delete { color: #e5493f; background: rgba(229, 73, 63, 0.1); }
-  .btn-delete:hover { background: #e5493f; color: #fff; }
+    .action-group {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+    }
+
+    .icon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: transparent;
+    }
+
+    .icon-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .btn-view {
+      color: var(--blue-accent);
+      background: rgba(47, 111, 237, 0.1);
+    }
+
+    .btn-view:hover {
+      background: var(--blue-accent);
+      color: #fff;
+    }
+
+    .btn-edit {
+      color: var(--orange);
+      background: rgba(240, 134, 44, 0.1);
+    }
+
+    .btn-edit:hover {
+      background: var(--orange);
+      color: #fff;
+    }
+
+    .btn-delete {
+      color: #e5493f;
+      background: rgba(229, 73, 63, 0.1);
+    }
+
+    .btn-delete:hover {
+      background: #e5493f;
+      color: #fff;
+    }
 
     /* TABLES & FORMS */
     .apply-btn {
@@ -834,20 +871,20 @@
     </main>
   </div>
 
-<!-- ========================================== -->
-<!-- MODAL VIEW: MELIHAT DETAIL DATA            -->
-<!-- ========================================== -->
-<div class="modal-overlay" id="modalView">
-  <div class="modal-box">
-    <h3 style="margin-bottom: 15px;">Detail Data <span id="viewType" style="color:var(--blue-accent)"></span></h3>
-    <div id="viewContent" style="max-height: 60vh; overflow-y: auto; padding-right: 5px;">
-      <!-- Tabel detail akan digenerate otomatis oleh JS -->
-    </div>
-    <div class="modal-actions" style="margin-top: 20px;">
-      <button class="reset-btn" onclick="closeAllModals()">Tutup</button>
+  <!-- ========================================== -->
+  <!-- MODAL VIEW: MELIHAT DETAIL DATA            -->
+  <!-- ========================================== -->
+  <div class="modal-overlay" id="modalView">
+    <div class="modal-box">
+      <h3 style="margin-bottom: 15px;">Detail Data <span id="viewType" style="color:var(--blue-accent)"></span></h3>
+      <div id="viewContent" style="max-height: 60vh; overflow-y: auto; padding-right: 5px;">
+        <!-- Tabel detail akan digenerate otomatis oleh JS -->
+      </div>
+      <div class="modal-actions" style="margin-top: 20px;">
+        <button class="reset-btn" onclick="closeAllModals()">Tutup</button>
+      </div>
     </div>
   </div>
-</div>
 
   <!-- ========================================== -->
   <!-- MODAL 1: AUDIT (Form Lengkap 14 Kolom)     -->
@@ -1334,53 +1371,53 @@
           color:${status === 'Selesai' ? '#1f8a52' : (status === 'Dalam Proses' ? '#b0791a' : '#c0392b')}">${status}</span>`;
     }
     // === KONFIGURASI NAMA LABEL UNTUK MODAL VIEW ===
-const viewLabels = {
-  nama: "Nama Kegiatan", objek: "Objek / OPD", tanggal: "Tanggal", noST: "Nomor ST",
-  uraian: "Uraian Penugasan", lama: "Lama Pelaksanaan", kodeTemuan: "Kode Temuan",
-  kelompokTemuan: "Kelompok Temuan", keterangan: "Keterangan",
-  nilaiTemuan: "Nilai Temuan", nilaiTL: "Nilai Tindak Lanjut",
-  persentase: "Persentase TL", rekomendasi: "Rekomendasi", status: "Status TL",
-  ruangLingkup: "Ruang Lingkup", hasil: "Hasil / Nilai",
-  jmlOPD: "Jumlah OPD", totalRek: "Total Rekomendasi",
-  sudahTL: "Sudah Ditindaklanjuti", belumTL: "Belum Ditindaklanjuti", progres: "Progres (%)"
-};
+    const viewLabels = {
+      nama: "Nama Kegiatan", objek: "Objek / OPD", tanggal: "Tanggal", noST: "Nomor ST",
+      uraian: "Uraian Penugasan", lama: "Lama Pelaksanaan", kodeTemuan: "Kode Temuan",
+      kelompokTemuan: "Kelompok Temuan", keterangan: "Keterangan",
+      nilaiTemuan: "Nilai Temuan", nilaiTL: "Nilai Tindak Lanjut",
+      persentase: "Persentase TL", rekomendasi: "Rekomendasi", status: "Status TL",
+      ruangLingkup: "Ruang Lingkup", hasil: "Hasil / Nilai",
+      jmlOPD: "Jumlah OPD", totalRek: "Total Rekomendasi",
+      sudahTL: "Sudah Ditindaklanjuti", belumTL: "Belum Ditindaklanjuti", progres: "Progres (%)"
+    };
 
-// === FUNGSI MELIHAT DETAIL DATA ===
-function viewCrudData(id) {
-  const item = state.crudData[currentYear][activePageType].find(d => d.id == id);
-  if (!item) return;
+    // === FUNGSI MELIHAT DETAIL DATA ===
+    function viewCrudData(id) {
+      const item = state.crudData[currentYear][activePageType].find(d => d.id == id);
+      if (!item) return;
 
-  document.getElementById("viewType").innerText = activePageType;
-  
-  let html = `<table style="width:100%; border-collapse: collapse; font-size:13px;">`;
-  
-  // Looping otomatis untuk semua data yang ada pada objek tersebut
-  for (const key in item) {
-    if (key === 'id' || item[key] === "") continue; // Sembunyikan ID atau data kosong
-    
-    let label = viewLabels[key] || key;
-    let val = item[key];
-    
-    // Formatting khusus agar lebih rapi saat dilihat
-    if(key === 'nilaiTemuan' || key === 'nilaiTL') val = "Rp " + Number(val||0).toLocaleString('id-ID');
-    if(key === 'status') val = getStatusBadge(val);
-    if(key === 'lama' && val) val = val + " Hari";
-    
-    html += `
+      document.getElementById("viewType").innerText = activePageType;
+
+      let html = `<table style="width:100%; border-collapse: collapse; font-size:13px;">`;
+
+      // Looping otomatis untuk semua data yang ada pada objek tersebut
+      for (const key in item) {
+        if (key === 'id' || item[key] === "") continue; // Sembunyikan ID atau data kosong
+
+        let label = viewLabels[key] || key;
+        let val = item[key];
+
+        // Formatting khusus agar lebih rapi saat dilihat
+        if (key === 'nilaiTemuan' || key === 'nilaiTL') val = "Rp " + Number(val || 0).toLocaleString('id-ID');
+        if (key === 'status') val = getStatusBadge(val);
+        if (key === 'lama' && val) val = val + " Hari";
+
+        html += `
       <tr>
         <td style="padding:10px 0; border-bottom:1px solid #eef1f6; font-weight:700; width:45%; color:var(--text-mid); vertical-align:top;">${label}</td>
         <td style="padding:10px 0; border-bottom:1px solid #eef1f6; color:var(--text-dark); vertical-align:top;">${val || '-'}</td>
       </tr>`;
-  }
-  
-  html += `</table>`;
-  document.getElementById("viewContent").innerHTML = html;
-  document.getElementById("modalView").classList.add("active");
-}
+      }
 
-// === FUNGSI TOMBOL AKSI (MENGGUNAKAN IKON SVG) ===
-function actionButtons(id) {
-  return `
+      html += `</table>`;
+      document.getElementById("viewContent").innerHTML = html;
+      document.getElementById("modalView").classList.add("active");
+    }
+
+    // === FUNGSI TOMBOL AKSI (MENGGUNAKAN IKON SVG) ===
+    function actionButtons(id) {
+      return `
     <div class="action-group">
       <!-- TOMBOL LIHAT (Ikon Mata) -->
       <button onclick="viewCrudData(${id})" class="icon-btn btn-view" title="Lihat Detail">
@@ -1407,9 +1444,22 @@ function actionButtons(id) {
       </button>
     </div>
   `;
-}
+    }
 
     // Fungsi kalkulasi otomatis untuk Reviu
+    function hitungReviu() {
+      const totalRek = parseFloat(document.getElementById("reviu_totalRek").value) || 0;
+      const sudahTL = parseFloat(document.getElementById("reviu_sudahTL").value) || 0;
+      
+      const belumTL = totalRek - sudahTL;
+      document.getElementById("reviu_belumTL").value = belumTL < 0 ? 0 : belumTL; 
+      
+      let persentase = 0;
+      if(totalRek > 0) {
+        persentase = (sudahTL / totalRek) * 100;
+      }
+      document.getElementById("reviu_persentase").value = persentase.toFixed(2) + "%";
+    }
     // Fungsi kalkulasi otomatis untuk Evaluasi
     function hitungEvaluasi() {
       const totalRek = parseFloat(document.getElementById("eval_totalRek").value) || 0;
@@ -1748,10 +1798,10 @@ function actionButtons(id) {
       if (!uraian) return alert("Uraian Reviu wajib diisi!");
 
       pushDataToState({
-        nama: "Reviu", // Identifier dasar
-        uraian: uraian,
+        nama: "Reviu",
         tanggal: document.getElementById("reviu_tanggal").value,
         noST: document.getElementById("reviu_noST").value,
+        uraian: uraian,
         jmlOPD: document.getElementById("reviu_jmlOPD").value,
         lama: document.getElementById("reviu_lama").value,
         totalRek: document.getElementById("reviu_totalRek").value,
@@ -1840,15 +1890,25 @@ function actionButtons(id) {
         document.getElementById("audit_persentase").value = item.persentase || "0%";
         document.getElementById("audit_rekomendasi").value = item.rekomendasi || "";
         document.getElementById("audit_status").value = item.status;
+
+        // hitungPersentase();
       }
-      else if (activePageType === 'Reviu') {
+     else if (activePageType === 'Reviu') {
         document.getElementById("modalReviu").classList.add("active");
         document.getElementById("reviu_id").value = item.id;
-        document.getElementById("reviu_nama").value = item.nama;
-        document.getElementById("reviu_objek").value = item.objek;
         document.getElementById("reviu_tanggal").value = item.tanggal || "";
-        document.getElementById("reviu_ruanglingkup").value = item.ruangLingkup || "";
-        document.getElementById("reviu_status").value = item.status;
+        document.getElementById("reviu_noST").value = item.noST || "";
+        document.getElementById("reviu_uraian").value = item.uraian || "";
+        document.getElementById("reviu_jmlOPD").value = item.jmlOPD || "";
+        document.getElementById("reviu_lama").value = item.lama || "";
+        document.getElementById("reviu_totalRek").value = item.totalRek || 0;
+        document.getElementById("reviu_sudahTL").value = item.sudahTL || 0;
+        document.getElementById("reviu_belumTL").value = item.belumTL || 0;
+        document.getElementById("reviu_persentase").value = item.persentase || "0%";
+        document.getElementById("reviu_status").value = item.status || "Dalam Proses";
+
+        // Panggil kalkulator agar persentase & belum TL langsung terhitung saat edit dibuka
+        hitungReviu();
       }
       else if (activePageType === 'Evaluasi') {
         document.getElementById("modalEvaluasi").classList.add("active");
